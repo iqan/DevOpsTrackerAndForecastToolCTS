@@ -34,6 +34,7 @@ namespace ExcelProc
             InitializeComponent();
         }
 
+        // Import Methods
         private void BtnImport_Click(object sender, RoutedEventArgs e)
         {
             // Create OpenFileDialog
@@ -71,36 +72,6 @@ namespace ExcelProc
             }
         }
 
-        private void BtnExportPreview_Click(object sender, RoutedEventArgs e)
-        {
-            PreviewFile.Visibility = Visibility.Visible;
-            var tbl = new DataTable();
-            string str = string.Empty;
-            if (App.Current.Properties["esName"].ToString() != string.Empty)
-                str = App.Current.Properties["esName"].ToString();
-            tbl = PreviewExcel(ImportPath.Text, str);
-            if (tbl != null)
-            {
-                PreviewFile.DataContext = tbl.DefaultView;
-            }
-        }
-
-        private void BtnExport_Click(object sender, RoutedEventArgs e)
-        {
-            // Create OpenFileDialog
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-
-            fbd.ShowDialog();
-            DialogResult result = fbd.ShowDialog();
-
-            if (!string.IsNullOrWhiteSpace(fbd.SelectedPath))
-            {
-                string filepath = fbd.SelectedPath;
-                ImportPath.FontStyle = FontStyles.Italic;
-                ExportPath.Text = filepath;
-            }
-        }
-
         private void GetImpSheetName(string path)
         {
             try
@@ -123,6 +94,54 @@ namespace ExcelProc
             }
         }
 
+        private void BtnExportPreview_Click(object sender, RoutedEventArgs e)
+        {
+            PreviewFile.Visibility = Visibility.Visible;
+            var tbl = new DataTable();
+            string str = string.Empty;
+            if (App.Current.Properties["esName"].ToString() != string.Empty)
+                str = App.Current.Properties["esName"].ToString();
+            tbl = PreviewExcel(ImportPath.Text, str);
+            if (tbl != null)
+            {
+                PreviewFile.DataContext = tbl.DefaultView;
+            }
+        }
+
+        private void BtnExport_Click(object sender, RoutedEventArgs e)
+        {
+            // Create OpenFileDialog
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+
+            DialogResult result = fbd.ShowDialog();
+
+            if (!string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            {
+                string filepath = fbd.SelectedPath;
+                ImportPath.FontStyle = FontStyles.Italic;
+                ExportPath.Text = filepath;
+            }
+        }
+
+        private void BtnExport_Do_Click(object sender, RoutedEventArgs e)
+        {
+            string destUrl = ExportPath.Text;
+            string impSheet = string.Empty;
+            if (App.Current.Properties["isName"].ToString() != string.Empty)
+            {
+                impSheet = App.Current.Properties["isName"].ToString();
+                destUrl += @"\" + impSheet + ".xls";
+            }
+            else
+            {
+                destUrl += @"\Sheet1.xls";
+            }
+            DataTable dt = PreviewExcel(ImportPath.Text, impSheet);
+            //ExportToExcel(dt, destUrl);
+            MessageBox.Show("Exporting File: " + destUrl);
+        }
+
+        //Common Methods
         private DataTable PreviewExcel(string path,string sName)
         {
             try
@@ -163,11 +182,10 @@ namespace ExcelProc
         }
 
         //Export to excel
-        private void ExportToExcel(DataTable dt)
+        private void ExportToExcel(DataTable dt, string dest)
         {
 
             /*Set up work book, work sheets, and excel application*/
-            
             try
             {
                 
@@ -178,6 +196,7 @@ namespace ExcelProc
             }
         }
 
+        // User Tips methods
         private void ImportSheetName_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             App.Current.Properties["isName"] = ImportSheetName.SelectedItem;
@@ -229,6 +248,16 @@ namespace ExcelProc
         }
 
         private void BtnPreviewExport_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "";
+        }
+
+        private void BtnExport_Do_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "Click to export worksheet to file in selected folder.";
+        }
+
+        private void BtnExport_Do_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             InfoLabel.Content = "";
         }
