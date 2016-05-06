@@ -87,6 +87,7 @@ namespace ExcelProc
                         ImportSheetName.Items.Add(x.Name);
                     }
                 }
+                BtnPreviewImport.IsEnabled = true;
             }
             catch (Exception e)
             {
@@ -98,10 +99,9 @@ namespace ExcelProc
         {
             PreviewFile.Visibility = Visibility.Visible;
             var tbl = new DataTable();
-            string str = string.Empty;
-            if (App.Current.Properties["esName"].ToString() != string.Empty)
-                str = App.Current.Properties["esName"].ToString();
-            tbl = PreviewExcel(ImportPath.Text, str);
+
+            //MessageBox.Show("prop esName = " + str);
+            tbl = PreviewExcel(ImportPath.Text, "Sheet1");
             if (tbl != null)
             {
                 PreviewFile.DataContext = tbl.DefaultView;
@@ -110,35 +110,32 @@ namespace ExcelProc
 
         private void BtnExport_Click(object sender, RoutedEventArgs e)
         {
-            // Create OpenFileDialog
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.FileName = "Document"; // Default file name
+            dlg.DefaultExt = ".xls"; // Default file extension
+            dlg.Filter = "Excel documents (.xls, .xlsx)|*.xls;*.xlsx"; // Filter files by extension
 
-            DialogResult result = fbd.ShowDialog();
+            // Show save file dialog box
+            dlg.ShowDialog();
 
-            if (!string.IsNullOrWhiteSpace(fbd.SelectedPath))
-            {
-                string filepath = fbd.SelectedPath;
-                ImportPath.FontStyle = FontStyles.Italic;
-                ExportPath.Text = filepath;
-            }
+            // Process save file dialog box results
+            // Save document
+            App.Current.Properties["esName"] += dlg.FileName;
+            ExportPath.FontStyle = FontStyles.Italic;
+            ExportPath.Text = App.Current.Properties["esName"].ToString();
+            if (App.Current.Properties["esName"].ToString() != string.Empty)
+                BtnExport_Do.IsEnabled = true;
         }
 
         private void BtnExport_Do_Click(object sender, RoutedEventArgs e)
         {
-            string destUrl = ExportPath.Text;
             string impSheet = string.Empty;
+            string destUrl = App.Current.Properties["esName"].ToString();
+
             if (App.Current.Properties["isName"].ToString() != string.Empty)
-            {
                 impSheet = App.Current.Properties["isName"].ToString();
-                destUrl += @"\" + impSheet + ".xls";
-            }
-            else
-            {
-                destUrl += @"\Sheet1.xls";
-            }
             DataTable dt = PreviewExcel(ImportPath.Text, impSheet);
-            //ExportToExcel(dt, destUrl);
-            MessageBox.Show("Exporting File: " + destUrl);
+            ExportToExcel(dt, destUrl);
         }
 
         //Common Methods
@@ -171,12 +168,16 @@ namespace ExcelProc
                             row[cell.Start.Column - 1] = cell.Text;
                         }
                     }
+                    if (App.Current.Properties["esName"].ToString() != string.Empty)
+                    {
+                        BtnPreviewExport.IsEnabled = true;   
+                    }
                     return tbl;
                 }
             }
             catch (Exception e)
             {
-                MessageBox.Show( e.Message, "Error while reading file!" );
+                MessageBox.Show(e.Message, "Error while reading file!");
                 return null;
             }
         }
@@ -188,20 +189,73 @@ namespace ExcelProc
             /*Set up work book, work sheets, and excel application*/
             try
             {
-                
+                using (ExcelPackage xp = new ExcelPackage())
+                {
+                    using (var stream = File.OpenWrite(dest))
+                    {
+                        xp.Load(stream);
+                    }
+                    string tableName = "Sheet1";
+                    if (App.Current.Properties["isName"].ToString() != string.Empty)
+                        tableName = App.Current.Properties["isName"].ToString();
+                    ExcelWorksheet ws = xp.Workbook.Worksheets.Add(tableName);
+
+                    int rowstart = 2;
+                    int colstart = 2;
+                    int rowend = rowstart;
+                    int colend = colstart + dt.Columns.Count;
+
+                    ws.Cells[rowstart, colstart, rowend, colend].Merge = true;
+                    ws.Cells[rowstart, colstart, rowend, colend].Value = dt.TableName;
+                    ws.Cells[rowstart, colstart, rowend, colend].Style.HorizontalAlignment =
+                        OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    ws.Cells[rowstart, colstart, rowend, colend].Style.Font.Bold = true;
+                    ws.Cells[rowstart, colstart, rowend, colend].Style.Fill.PatternType =
+                        OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    ws.Cells[rowstart, colstart, rowend, colend].Style.Fill.BackgroundColor.SetColor(
+                        System.Drawing.Color.LightGray);
+
+                    rowstart += 2;
+                    rowend = rowstart + dt.Rows.Count;
+                    ws.Cells[rowstart, colstart].LoadFromDataTable(dt, true);
+                    int i = 1;
+                    foreach (DataColumn dc in dt.Columns)
+                    {
+                        i++;
+                        if (dc.DataType == typeof (decimal))
+                            ws.Column(i).Style.Numberformat.Format = "#0.00";
+                    }
+                    ws.Cells[ws.Dimension.Address].AutoFitColumns();
+
+
+
+                    ws.Cells[rowstart, colstart, rowend, colend].Style.Border.Top.Style =
+                        ws.Cells[rowstart, colstart, rowend, colend].Style.Border.Bottom.Style =
+                            ws.Cells[rowstart, colstart, rowend, colend].Style.Border.Left.Style =
+                                ws.Cells[rowstart, colstart, rowend, colend].Style.Border.Right.Style =
+                                    OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error while exporting excel file.");
+                MessageBox.Show(ex.Message,"Error While Exporting");
+                BtnPreviewExport.IsEnabled = false;  
             }
         }
 
-        // User Tips methods
-        private void ImportSheetName_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            App.Current.Properties["isName"] = ImportSheetName.SelectedItem;
-        }
+        #region Import sheet name and export file path with filename
+                private void ImportSheetName_SelectionChanged(object sender, SelectionChangedEventArgs e)
+                {
+                    App.Current.Properties["isName"] = ImportSheetName.SelectedItem;
+                }
+                private void ExportPath_SelectionChanged(object sender, RoutedEventArgs e)
+                {
+                    App.Current.Properties["esName"] = ExportPath.Text;
+                }
+        #endregion
 
+        #region user tips methods
+        // User Tips Methods
         private void BtnImport_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             InfoLabel.Content = "Select a file to Import.";
@@ -261,5 +315,6 @@ namespace ExcelProc
         {
             InfoLabel.Content = "";
         }
+#endregion
     }
 }
