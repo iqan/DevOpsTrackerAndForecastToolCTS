@@ -19,6 +19,7 @@ using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using MessageBox = System.Windows.MessageBox;
+using OfficeOpenXml.Style;
 
 namespace ExcelProc
 {
@@ -114,15 +115,15 @@ namespace ExcelProc
         {
             SaveFileDialog dlg = new SaveFileDialog();
             dlg.FileName = "Document"; // Default file name
-            dlg.DefaultExt = ".xls"; // Default file extension
-            dlg.Filter = "Excel documents (.xls, .xlsx)|*.xls;*.xlsx"; // Filter files by extension
+            dlg.DefaultExt = ".xlsx"; // Default file extension
+            dlg.Filter = "Excel documents (.xlsx)|*.xlsx"; // Filter files by extension
 
             // Show save file dialog box
             dlg.ShowDialog();
 
             // Process save file dialog box results
             // Save document
-            App.Current.Properties["esName"] += dlg.FileName;
+            App.Current.Properties["esName"] = dlg.FileName;
             ExportPath.FontStyle = FontStyles.Italic;
             ExportPath.Text = App.Current.Properties["esName"].ToString();
             if (App.Current.Properties["esName"].ToString() != string.Empty)
@@ -137,6 +138,7 @@ namespace ExcelProc
             if (App.Current.Properties["isName"].ToString() != string.Empty)
                 impSheet = App.Current.Properties["isName"].ToString();
             DataTable dt = PreviewExcel(ImportPath.Text, impSheet);
+            PreviewFile.DataContext = dt.DefaultView;
             ExportToExcel(dt, destUrl);
         }
         #endregion
@@ -192,52 +194,37 @@ namespace ExcelProc
             /*Set up work book, work sheets, and excel application*/
             try
             {
-                using (ExcelPackage xp = new ExcelPackage())
+                
+                var file = new FileInfo(dest);
+                using (var xp = new ExcelPackage(file))
                 {
-                    using (var stream = File.OpenWrite(dest))
-                    {
-                        xp.Load(stream);
-                    }
-                    string tableName = "Sheet1";
-                    if (App.Current.Properties["isName"].ToString() != string.Empty)
-                        tableName = App.Current.Properties["isName"].ToString();
+                    string tableName = "Forecast_" + DateTime.Today.ToString("dd-mm-yyyy");
                     ExcelWorksheet ws = xp.Workbook.Worksheets.Add(tableName);
 
-                    int rowstart = 2;
-                    int colstart = 2;
-                    int rowend = rowstart;
-                    int colend = colstart + dt.Columns.Count;
+                    //Headers
+                    ws.Cells["A1"].Value = "Month";
+                    ws.Cells["B1"].Value = "Project#";
+                    ws.Cells["C1"].Value = "Project Name";
+                    ws.Cells["D1"].Value = "Resources";
+                    ws.Cells["E1"].Value = "Billing Period";
+                    ws.Cells["F1"].Value = "Rate";
+                    ws.Cells["G1"].Value = "Leaves";
+                    ws.Cells["H1"].Value = "Billing days";
+                    ws.Cells["I1"].Value = "Billing (Total)";
 
-                    ws.Cells[rowstart, colstart, rowend, colend].Merge = true;
-                    ws.Cells[rowstart, colstart, rowend, colend].Value = dt.TableName;
-                    ws.Cells[rowstart, colstart, rowend, colend].Style.HorizontalAlignment =
-                        OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    ws.Cells[rowstart, colstart, rowend, colend].Style.Font.Bold = true;
-                    ws.Cells[rowstart, colstart, rowend, colend].Style.Fill.PatternType =
-                        OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    ws.Cells[rowstart, colstart, rowend, colend].Style.Fill.BackgroundColor.SetColor(
-                        System.Drawing.Color.LightGray);
-
-                    rowstart += 2;
-                    rowend = rowstart + dt.Rows.Count;
-                    ws.Cells[rowstart, colstart].LoadFromDataTable(dt, true);
-                    int i = 1;
-                    foreach (DataColumn dc in dt.Columns)
+                    using (var range = ws.Cells["A1:I1"])
                     {
-                        i++;
-                        if (dc.DataType == typeof (decimal))
-                            ws.Column(i).Style.Numberformat.Format = "#0.00";
+                        range.Style.Font.Bold = true;
+                        range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.YellowGreen);
+                        range.Style.Font.Color.SetColor(System.Drawing.Color.Black);
+                        range.Style.ShrinkToFit = false;
                     }
+
                     ws.Cells[ws.Dimension.Address].AutoFitColumns();
-
-
-
-                    ws.Cells[rowstart, colstart, rowend, colend].Style.Border.Top.Style =
-                        ws.Cells[rowstart, colstart, rowend, colend].Style.Border.Bottom.Style =
-                            ws.Cells[rowstart, colstart, rowend, colend].Style.Border.Left.Style =
-                                ws.Cells[rowstart, colstart, rowend, colend].Style.Border.Right.Style =
-                                    OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                    xp.Save();
                 }
+                InfoLabel.Content = "File exported successfully.";
             }
             catch (Exception ex)
             {
