@@ -3,15 +3,24 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Ops Tracker and Forecast Tool" Height="491" Width="560">
     <Grid Name="MainGrid" Margin="10,0,2,-1">
-        <DataGrid Name="PreviewFile" Margin="-2,113,10,35" Visibility="Hidden" ItemsSource="{Binding}"/>
-        <Button Name="BtnImport" Content="Import" HorizontalAlignment="Left" Height="22" Margin="-2,58,0,0" VerticalAlignment="Top" Width="57" Click="BtnImport_Click"/>
-        <Button Name="BtnExport" Content="Export" HorizontalAlignment="Left" Height="23" Margin="-2,85,0,0" VerticalAlignment="Top" Width="57" Click="BtnExport_Click"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <DataGrid Name="PreviewFile" Margin="-2,139,10,54" Visibility="Visible" ItemsSource="{Binding}"/>
+        <Button Name="BtnImport" Content="Import" HorizontalAlignment="Left" Height="22" Margin="-2,58,0,0" VerticalAlignment="Top" Width="57" Click="BtnImport_Click" MouseLeave="BtnImport_MouseLeave" MouseEnter="BtnImport_MouseEnter"/>
+        <Button Name="BtnExport" Content="Export" HorizontalAlignment="Left" Height="23" Margin="-2,85,0,0" VerticalAlignment="Top" Width="57" Click="BtnExport_Click" MouseLeave="BtnExport_MouseLeave" MouseEnter="BtnExport_MouseEnter"/>
         <Image Name="Logo" HorizontalAlignment="Left" Height="48" Margin="-2,10,0,0" VerticalAlignment="Top" Width="181" Source="Cognizant_LOGO.png"/>
-        <TextBox Name="ImportPath" HorizontalAlignment="Left" Height="22" Margin="60,58,0,0" Text="Import File Path" VerticalAlignment="Top" Width="300" Focusable="False" MaxLines="1"/>
-        <ComboBox Name="ImportSheetName" Text="Select Sheet" HorizontalAlignment="Left" Height="22" Margin="365,58,0,0" VerticalAlignment="Top" Width="94" ItemsSource="{Binding}" SelectionChanged="ImportSheetName_SelectionChanged" SelectedIndex="0"/>
-        <Button Name="BtnPreviewImport" Content="Preview" HorizontalAlignment="Left" Height="22" Margin="464,57,0,0" VerticalAlignment="Top" Width="64" Click="BtnImportPreview_Click"/>
-        <TextBox Name="ExportPath" HorizontalAlignment="Left" Height="23" Margin="60,85,0,0" Text="Export Folder Path" VerticalAlignment="Top" Width="300" Focusable="False" MaxLines="1"/>
-        <Button Name="BtnPreviewExport" Content="See Output Preview" HorizontalAlignment="Left" Height="23" Margin="365,85,0,0" VerticalAlignment="Top" Width="163" Click="BtnExportPreview_Click"/>
-        <Label Name="Footer" Content="Created by - Iqan" HorizontalAlignment="Left" Margin="424,427,0,0" VerticalAlignment="Top" Height="25" Width="104" RenderTransformOrigin="-0.163,0.56"/>
+        <TextBox Name="ImportPath" HorizontalAlignment="Left" Height="22" Margin="60,58,0,0" VerticalAlignment="Top" Width="300" Focusable="False" MaxLines="1"/>
+        <ComboBox Name="ImportSheetName" Text="Select Sheet" HorizontalAlignment="Left" Height="22" Margin="365,58,0,0" VerticalAlignment="Top" Width="94" ItemsSource="{Binding}" SelectionChanged="ImportSheetName_SelectionChanged" SelectedIndex="0" MouseLeave="ImportSheetName_MouseLeave" MouseEnter="ImportSheetName_MouseEnter"/>
+        <Button Name="BtnPreviewImport" Content="Preview" HorizontalAlignment="Left" Height="22" Margin="464,57,0,0" VerticalAlignment="Top" Width="64" Click="BtnImportPreview_Click" MouseEnter="BtnPreviewImport_MouseEnter" MouseLeave="BtnPreviewImport_MouseLeave"/>
+        <TextBox Name="ExportPath" HorizontalAlignment="Left" Height="23" Margin="60,85,0,0" VerticalAlignment="Top" Width="300" Focusable="False" MaxLines="1"/>
+        <Button Name="BtnPreviewExport" Content="See Output Preview" HorizontalAlignment="Left" Height="23" Margin="365,85,0,0" VerticalAlignment="Top" Width="163" Click="BtnExportPreview_Click" MouseEnter="BtnPreviewExport_MouseEnter" MouseLeave="BtnPreviewExport_MouseLeave"/>
+        <Label Name="Footer" Content="Created by - Iqan" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="25" Width="104" RenderTransformOrigin="-0.163,0.56"/>
+        <Label x:Name="Footer_Copy" Content="© iqan.in" Height="25" Width="63" RenderTransformOrigin="-0.163,0.56" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+        <Label x:Name="label" Content="Info:" HorizontalAlignment="Left" Margin="0,113,0,0" VerticalAlignment="Top" Width="35" Height="26" FontSize="10.667" FontWeight="Bold"/>
+        <Label x:Name="InfoLabel" HorizontalAlignment="Left" Margin="40,113,0,0" VerticalAlignment="Top" Width="488" Height="26" FontSize="10.667" FontStyle="Italic"/>
     </Grid>
 </Window>

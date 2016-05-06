@@ -65,7 +65,10 @@ namespace ExcelProc
             if (App.Current.Properties["isName"].ToString() != string.Empty)
                 str = App.Current.Properties["isName"].ToString();
             tbl = PreviewExcel(ImportPath.Text, str);
-            PreviewFile.DataContext = tbl.DefaultView;
+            if (tbl != null)
+            {
+                PreviewFile.DataContext = tbl.DefaultView;
+            }
         }
 
         private void BtnExportPreview_Click(object sender, RoutedEventArgs e)
@@ -76,7 +79,10 @@ namespace ExcelProc
             if (App.Current.Properties["esName"].ToString() != string.Empty)
                 str = App.Current.Properties["esName"].ToString();
             tbl = PreviewExcel(ImportPath.Text, str);
-            PreviewFile.DataContext = tbl.DefaultView;
+            if (tbl != null)
+            {
+                PreviewFile.DataContext = tbl.DefaultView;
+            }
         }
 
         private void BtnExport_Click(object sender, RoutedEventArgs e)
@@ -97,48 +103,62 @@ namespace ExcelProc
 
         private void GetImpSheetName(string path)
         {
-            using (var pck = new OfficeOpenXml.ExcelPackage())
+            try
             {
-                using (var stream = File.OpenRead(path))
+                using (var pck = new OfficeOpenXml.ExcelPackage())
                 {
-                    pck.Load(stream);
+                    using (var stream = File.OpenRead(path))
+                    {
+                        pck.Load(stream);
+                    }
+                    foreach (var x in pck.Workbook.Worksheets)
+                    {
+                        ImportSheetName.Items.Add(x.Name);
+                    }
                 }
-                foreach (var x in pck.Workbook.Worksheets)
-                {
-                    ImportSheetName.Items.Add(x.Name);
-                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error while reading file!");
             }
         }
 
         private DataTable PreviewExcel(string path,string sName)
         {
-
-            using (var pck = new OfficeOpenXml.ExcelPackage())
+            try
             {
-                using (var stream = File.OpenRead(path))
+                using (var pck = new OfficeOpenXml.ExcelPackage())
                 {
-                    pck.Load(stream);
-                }
-                var ws = pck.Workbook.Worksheets["SOW-PO Tracker 2016"];
-
-                if (sName != string.Empty)
-                    ws = pck.Workbook.Worksheets[sName];        
-               
-                DataTable tbl = new DataTable();
-                foreach (var firstRowCell in ws.Cells[1, 1, 1, ws.Dimension.End.Column])
-                {
-                    tbl.Columns.Add(firstRowCell.Text);
-                }
-                for (int rowNum = 2; rowNum <= ws.Dimension.End.Row; rowNum++)
-                {
-                    var wsRow = ws.Cells[rowNum, 1, rowNum, ws.Dimension.End.Column];
-                    DataRow row = tbl.Rows.Add();
-                    foreach (var cell in wsRow)
+                    using (var stream = File.OpenRead(path))
                     {
-                        row[cell.Start.Column - 1] = cell.Text;
+                        pck.Load(stream);
                     }
+                    var ws = pck.Workbook.Worksheets["Sheet1"];
+
+                    if (sName != string.Empty)
+                        ws = pck.Workbook.Worksheets[sName];
+
+                    DataTable tbl = new DataTable();
+                    foreach (var firstRowCell in ws.Cells[1, 1, 1, ws.Dimension.End.Column])
+                    {
+                        tbl.Columns.Add(firstRowCell.Text);
+                    }
+                    for (int rowNum = 2; rowNum <= ws.Dimension.End.Row; rowNum++)
+                    {
+                        var wsRow = ws.Cells[rowNum, 1, rowNum, ws.Dimension.End.Column];
+                        DataRow row = tbl.Rows.Add();
+                        foreach (var cell in wsRow)
+                        {
+                            row[cell.Start.Column - 1] = cell.Text;
+                        }
+                    }
+                    return tbl;
                 }
-                return tbl;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show( e.Message, "Error while reading file!" );
+                return null;
             }
         }
 
@@ -161,6 +181,56 @@ namespace ExcelProc
         private void ImportSheetName_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             App.Current.Properties["isName"] = ImportSheetName.SelectedItem;
+        }
+
+        private void BtnImport_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "Select a file to Import.";
+        }
+
+        private void BtnImport_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "";
+        }
+
+        private void BtnExport_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "Select a folder to Export Excel file into.";
+        }
+
+        private void BtnExport_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "";
+        }
+
+        private void ImportSheetName_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "Select a Sheet.";
+        }
+
+        private void ImportSheetName_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "";
+        }
+
+        private void BtnPreviewImport_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "Click to see preview of selected worksheet.";
+        }
+
+        private void BtnPreviewImport_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "";
+        }
+
+        private void BtnPreviewExport_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "Click to see preview of exporting worksheet.";
+        }
+
+        private void BtnPreviewExport_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "";
         }
     }
 }
