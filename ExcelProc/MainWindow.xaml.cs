@@ -198,7 +198,7 @@ namespace ExcelProc
                 var file = new FileInfo(dest);
                 using (var xp = new ExcelPackage(file))
                 {
-                    string tableName = "Forecast_" + DateTime.Today.ToString("dd-mm-yyyy");
+                    string tableName = "Forecast_" + DateTime.Today.ToString("dd-MM-yyyy");
                     ExcelWorksheet ws = xp.Workbook.Worksheets.Add(tableName);
 
                     //Headers
