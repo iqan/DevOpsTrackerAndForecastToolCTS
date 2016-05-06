@@ -34,7 +34,7 @@ namespace ExcelProc
             InitializeComponent();
         }
 
-        // Import Methods
+        #region Import Methods
         private void BtnImport_Click(object sender, RoutedEventArgs e)
         {
             // Create OpenFileDialog
@@ -94,7 +94,9 @@ namespace ExcelProc
                 MessageBox.Show(e.Message, "Error while reading file!");
             }
         }
+        #endregion
 
+        #region Export Methods
         private void BtnExportPreview_Click(object sender, RoutedEventArgs e)
         {
             PreviewFile.Visibility = Visibility.Visible;
@@ -137,6 +139,7 @@ namespace ExcelProc
             DataTable dt = PreviewExcel(ImportPath.Text, impSheet);
             ExportToExcel(dt, destUrl);
         }
+        #endregion
 
         //Common Methods
         private DataTable PreviewExcel(string path,string sName)
