@@ -54,7 +54,6 @@ namespace ExcelProc
                 string filename = dlg.FileName;
                 ImportPath.FontStyle = FontStyles.Italic;
                 ImportPath.Text = filename;
-                ImportSheetName.Items.Add("Select Sheet");
                 GetImpSheetName(filename);
             }
         }
@@ -83,6 +82,8 @@ namespace ExcelProc
                     {
                         pck.Load(stream);
                     }
+                    ImportSheetName.Items.Clear();
+                    ImportSheetName.Items.Add("Select Sheet");
                     foreach (var x in pck.Workbook.Worksheets)
                     {
                         ImportSheetName.Items.Add(x.Name);
@@ -104,7 +105,7 @@ namespace ExcelProc
             var tbl = new DataTable();
 
             //MessageBox.Show("prop esName = " + str);
-            tbl = PreviewExcel(ImportPath.Text, "Sheet1");
+            tbl = PreviewExcel(ExportPath.Text, string.Empty);
             if (tbl != null)
             {
                 PreviewFile.DataContext = tbl.DefaultView;
@@ -113,6 +114,8 @@ namespace ExcelProc
 
         private void BtnExport_Click(object sender, RoutedEventArgs e)
         {
+            PreviewFile.DataContext = null;
+
             SaveFileDialog dlg = new SaveFileDialog();
             dlg.FileName = "Document"; // Default file name
             dlg.DefaultExt = ".xlsx"; // Default file extension
@@ -138,7 +141,7 @@ namespace ExcelProc
             if (App.Current.Properties["isName"].ToString() != string.Empty)
                 impSheet = App.Current.Properties["isName"].ToString();
             DataTable dt = PreviewExcel(ImportPath.Text, impSheet);
-            PreviewFile.DataContext = dt.DefaultView;
+            
             ExportToExcel(dt, destUrl);
         }
         #endregion
@@ -154,7 +157,7 @@ namespace ExcelProc
                     {
                         pck.Load(stream);
                     }
-                    var ws = pck.Workbook.Worksheets["Sheet1"];
+                    var ws = pck.Workbook.Worksheets.First();
 
                     if (sName != string.Empty)
                         ws = pck.Workbook.Worksheets[sName];
@@ -225,6 +228,7 @@ namespace ExcelProc
                     xp.Save();
                 }
                 InfoLabel.Content = "File exported successfully.";
+                MessageBox.Show("File Exported successfully.", "Export sucessful");
             }
             catch (Exception ex)
             {
