@@ -3,12 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Ops Tracker and Forecast Tool" Height="648.5" Width="800" Icon="cognizant-icon.png">
     <Grid Name="MainGrid" Margin="0,0,2,-1" Background="GhostWhite">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
         <DataGrid Name="PreviewFile" Margin="10,244,10,56" Visibility="Hidden" ItemsSource="{Binding}"/>
         <Image Name="Logo" HorizontalAlignment="Left" Height="54" Margin="10,10,0,0" VerticalAlignment="Top" Width="171" Source="Cognizant_LOGO.png"/>
         <TextBox Name="ImportPath" HorizontalAlignment="Left" Height="22" Margin="106,94,0,0" VerticalAlignment="Top" Width="419" Focusable="False" MaxLines="1"/>
@@ -25,7 +19,14 @@
         <Label x:Name="Label_Import" Background="GhostWhite" Content="Import" HorizontalAlignment="Left" Margin="19,62,0,0" VerticalAlignment="Top" Width="62" Height="29" FontSize="14.667" FontWeight="Bold"/>
         <Label x:Name="Label_Export" Background="GhostWhite" Content="Export" HorizontalAlignment="Left" Margin="19,138,0,0" VerticalAlignment="Top" Width="62" Height="29" FontSize="14.667" FontWeight="Bold" RenderTransformOrigin="0.81,-0.577"/>
         <Border x:Name="ImportBorder" Background="GhostWhite" BorderBrush="Silver" BorderThickness="1" CornerRadius="3,3,3,3" HorizontalAlignment="Left" Height="50" Margin="10,80,0,0" VerticalAlignment="Top" Width="770" Opacity="0.5" IsHitTestVisible="False" IsEnabled="False" Panel.ZIndex="-1"/>
-        <Border x:Name="ImportBorder_Copy" Background="GhostWhite" BorderBrush="Silver" BorderThickness="1" CornerRadius="3,3,3,3" HorizontalAlignment="Left" Height="87" Margin="10,152,0,0" VerticalAlignment="Top" Width="770" Opacity="0.5" IsHitTestVisible="False" IsEnabled="False" Panel.ZIndex="-1"/>
+        <Border x:Name="ExportBorder" Background="GhostWhite" BorderBrush="Silver" BorderThickness="1" CornerRadius="3,3,3,3" HorizontalAlignment="Left" Height="87" Margin="10,152,0,0" VerticalAlignment="Top" Width="770" Opacity="0.5" IsHitTestVisible="False" IsEnabled="False" Panel.ZIndex="-1"/>
+        <Label x:Name="label" Content="From" HorizontalAlignment="Left" Height="24" Margin="118,198,0,0" VerticalAlignment="Top" Width="42" Foreground="Black"/>
         <Border BorderBrush="GhostWhite" BorderThickness="1" HorizontalAlignment="Stretch" Height="25" VerticalAlignment="Bottom" Width="Auto" Background="#FF92B9E0" Panel.ZIndex="-1"/>
+        <ComboBox x:Name="FromMonth" Text="Select Sheet" HorizontalAlignment="Left" Height="22" Margin="165,199,0,0" VerticalAlignment="Top" Width="101" ItemsSource="{Binding}" SelectionChanged="ImportSheetName_SelectionChanged" SelectedIndex="0" MouseLeave="ImportSheetName_MouseLeave" MouseEnter="ImportSheetName_MouseEnter"/>
+        <ComboBox x:Name="FromYear" Text="Select Sheet" HorizontalAlignment="Left" Height="22" Margin="271,199,0,0" VerticalAlignment="Top" Width="54" ItemsSource="{Binding}" SelectionChanged="ImportSheetName_SelectionChanged" SelectedIndex="0" MouseLeave="ImportSheetName_MouseLeave" MouseEnter="ImportSheetName_MouseEnter" RenderTransformOrigin="-0.205,0.682"/>
+        <Label x:Name="label_Copy" Content="To" HorizontalAlignment="Left" Height="24" Margin="330,199,0,0" VerticalAlignment="Top" Width="28" Foreground="Black" RenderTransformOrigin="1.393,0.542"/>
+        <ComboBox x:Name="ToMonth" Text="Select Sheet" HorizontalAlignment="Left" Height="22" Margin="363,199,0,0" VerticalAlignment="Top" Width="101" ItemsSource="{Binding}" SelectionChanged="ImportSheetName_SelectionChanged" SelectedIndex="0" MouseLeave="ImportSheetName_MouseLeave" MouseEnter="ImportSheetName_MouseEnter"/>
+        <ComboBox x:Name="ToYear" Text="Select Sheet" HorizontalAlignment="Left" Height="22" Margin="469,199,0,0" VerticalAlignment="Top" Width="56" ItemsSource="{Binding}" SelectionChanged="ImportSheetName_SelectionChanged" SelectedIndex="0" MouseLeave="ImportSheetName_MouseLeave" MouseEnter="ImportSheetName_MouseEnter"/>
+
     </Grid>
 </Window>

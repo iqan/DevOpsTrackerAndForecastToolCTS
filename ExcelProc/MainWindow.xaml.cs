@@ -33,6 +33,7 @@ namespace ExcelProc
             App.Current.Properties["isName"] = string.Empty;
             App.Current.Properties["esName"] = string.Empty;
             InitializeComponent();
+            SetComboboxItems();
         }
 
         #region Import Methods
@@ -308,6 +309,31 @@ namespace ExcelProc
         {
             InfoLabel.Content = "";
         }
-#endregion
+        #endregion
+
+        #region Set some properties
+
+        public void SetComboboxItems()
+        {
+            var months = System.Globalization.DateTimeFormatInfo.InvariantInfo.MonthNames;
+            FromMonth.Items.Add("Select Month");
+            ToMonth.Items.Add("Select Month");
+            FromYear.Items.Add("Year");
+            ToYear.Items.Add("Year");
+
+            for (int i = 2015; i < 2099; i++)
+            {
+                FromYear.Items.Add(i.ToString());
+                ToYear.Items.Add(i.ToString());
+            }
+
+            foreach (var month in months)
+            {
+                FromMonth.Items.Add(month);
+                ToMonth.Items.Add(month);
+            }
+        }
+
+        #endregion
     }
 }

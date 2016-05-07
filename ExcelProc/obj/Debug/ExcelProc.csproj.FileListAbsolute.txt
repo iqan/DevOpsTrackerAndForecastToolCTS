@@ -40,3 +40,4 @@ D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\ExcelProc_Markup
 D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\ExcelProc.g.resources
 D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\ExcelProc.Properties.Resources.resources
 D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\ExcelProc.csproj.GenerateResource.Cache
+D:\dev\Local Git Repo\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\ExcelProc.csprojResolveAssemblyReference.cache
