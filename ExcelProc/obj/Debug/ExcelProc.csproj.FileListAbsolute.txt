@@ -18,8 +18,6 @@ D:\dev\Local Git Repo\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\ExcelP
 D:\dev\Local Git Repo\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\ExcelProc.pdb
 D:\dev\Local Git Repo\DevOpsTrackerAndForecastToolCTS\ExcelProc\bin\Debug\ExcelProc.exe
 D:\dev\Local Git Repo\DevOpsTrackerAndForecastToolCTS\ExcelProc\bin\Debug\ExcelProc.pdb
-D:\dev\Local Git Repo\DevOpsTrackerAndForecastToolCTS\ExcelProc\bin\Debug\EPPlus.xml
-D:\dev\Local Git Repo\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\ExcelProc.csprojResolveAssemblyReference.cache
 D:\dev\Local Git Repo\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\MainWindow.baml
 D:\dev\Local Git Repo\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\MainWindow.g.cs
 D:\dev\Local Git Repo\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\App.g.cs

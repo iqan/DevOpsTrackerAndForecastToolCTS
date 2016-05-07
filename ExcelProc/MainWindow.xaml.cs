@@ -144,6 +144,52 @@ namespace ExcelProc
             
             ExportToExcel(dt, destUrl);
         }
+
+        private void ExportToExcel(DataTable dt, string dest)
+        {
+
+            /*Set up work book, work sheets, and excel application*/
+            try
+            {
+
+                var file = new FileInfo(dest);
+                using (var xp = new ExcelPackage(file))
+                {
+                    string tableName = "Forecast_" + DateTime.Today.ToString("dd-MM-yyyy");
+                    ExcelWorksheet ws = xp.Workbook.Worksheets.Add(tableName);
+
+                    //Headers
+                    ws.Cells["A1"].Value = "Month";
+                    ws.Cells["B1"].Value = "Project#";
+                    ws.Cells["C1"].Value = "Project Name";
+                    ws.Cells["D1"].Value = "Resources";
+                    ws.Cells["E1"].Value = "Billing Period";
+                    ws.Cells["F1"].Value = "Rate";
+                    ws.Cells["G1"].Value = "Leaves";
+                    ws.Cells["H1"].Value = "Billing days";
+                    ws.Cells["I1"].Value = "Billing (Total)";
+
+                    using (var range = ws.Cells["A1:I1"])
+                    {
+                        range.Style.Font.Bold = true;
+                        range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.YellowGreen);
+                        range.Style.Font.Color.SetColor(System.Drawing.Color.Black);
+                        range.Style.ShrinkToFit = false;
+                    }
+
+                    ws.Cells[ws.Dimension.Address].AutoFitColumns();
+                    xp.Save();
+                }
+                InfoLabel.Content = "File exported successfully.";
+                MessageBox.Show("File Exported successfully.", "Export sucessful");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error While Exporting");
+                BtnPreviewExport.IsEnabled = false;
+            }
+        }
         #endregion
 
         //Common Methods
@@ -187,53 +233,6 @@ namespace ExcelProc
             {
                 MessageBox.Show(e.Message, "Error while reading file!");
                 return null;
-            }
-        }
-
-        //Export to excel
-        private void ExportToExcel(DataTable dt, string dest)
-        {
-
-            /*Set up work book, work sheets, and excel application*/
-            try
-            {
-                
-                var file = new FileInfo(dest);
-                using (var xp = new ExcelPackage(file))
-                {
-                    string tableName = "Forecast_" + DateTime.Today.ToString("dd-MM-yyyy");
-                    ExcelWorksheet ws = xp.Workbook.Worksheets.Add(tableName);
-
-                    //Headers
-                    ws.Cells["A1"].Value = "Month";
-                    ws.Cells["B1"].Value = "Project#";
-                    ws.Cells["C1"].Value = "Project Name";
-                    ws.Cells["D1"].Value = "Resources";
-                    ws.Cells["E1"].Value = "Billing Period";
-                    ws.Cells["F1"].Value = "Rate";
-                    ws.Cells["G1"].Value = "Leaves";
-                    ws.Cells["H1"].Value = "Billing days";
-                    ws.Cells["I1"].Value = "Billing (Total)";
-
-                    using (var range = ws.Cells["A1:I1"])
-                    {
-                        range.Style.Font.Bold = true;
-                        range.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.YellowGreen);
-                        range.Style.Font.Color.SetColor(System.Drawing.Color.Black);
-                        range.Style.ShrinkToFit = false;
-                    }
-
-                    ws.Cells[ws.Dimension.Address].AutoFitColumns();
-                    xp.Save();
-                }
-                InfoLabel.Content = "File exported successfully.";
-                MessageBox.Show("File Exported successfully.", "Export sucessful");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message,"Error While Exporting");
-                BtnPreviewExport.IsEnabled = false;  
             }
         }
 

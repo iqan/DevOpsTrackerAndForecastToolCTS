@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("cognizant_logo.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("cognizant-icon.png")]
 
 
