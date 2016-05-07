@@ -54,6 +54,8 @@ namespace ExcelProc
                 string filename = dlg.FileName;
                 ImportPath.FontStyle = FontStyles.Italic;
                 ImportPath.Text = filename;
+                ImportSheetName.Items.Clear();
+                ImportSheetName.Items.Add("Select Sheet");
                 GetImpSheetName(filename);
             }
         }
@@ -82,8 +84,6 @@ namespace ExcelProc
                     {
                         pck.Load(stream);
                     }
-                    ImportSheetName.Items.Clear();
-                    ImportSheetName.Items.Add("Select Sheet");
                     foreach (var x in pck.Workbook.Worksheets)
                     {
                         ImportSheetName.Items.Add(x.Name);
