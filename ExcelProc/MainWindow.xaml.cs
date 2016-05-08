@@ -187,7 +187,7 @@ namespace ExcelProc
                     }
 
                     //var resources = dt.AsEnumerable().Select(r => r.Field<int>("Resource Name")).ToList();
-                    List<Resource> resources = new List<Resource>(dt.Rows.Count);
+                    List<Resource> resources = new List<Resource>();
                     
                     foreach (DataRow row in dt.Rows)
                     {
@@ -205,10 +205,31 @@ namespace ExcelProc
                             resources.Add(res);
                         }
                     }
-
-                    //DataRow[] dr = dt.AsEnumerable().Where(dr => dr.Field<string>("Resource Name") == "put name");
+                    
                     ws.InsertRow(2, resources.Count() + 1);
                     int i = 2;
+
+                    DateTime fromDate = new DateTime((int)App.Current.Properties["FromYear"], (int)App.Current.Properties["FromMon"],1);
+                    int x = 0;
+                    switch ((int)App.Current.Properties["ToMon"])
+                    {
+                        case 1:
+                        case 3:
+                        case 5:
+                        case 7:
+                        case 8:
+                        case 10:
+                        case 12:
+                            x = 31;
+                            break;
+                        case 2:
+                            x = 28;
+                            break;
+                        default:
+                            x = 30;
+                            break;
+                    }
+                    DateTime toDate = new DateTime((int)App.Current.Properties["ToYear"], (int)App.Current.Properties["ToMon"],x);
 
 
                     foreach (var res in resources)
@@ -443,5 +464,45 @@ namespace ExcelProc
         }
 
         #endregion
+
+        //getting total days
+
+        public static int BillingDays(DateTime startDate, DateTime endDate)
+        {
+            int count = 0;
+            for (DateTime index = startDate; index < endDate; index = index.AddDays(1))
+            {
+                if (index.DayOfWeek != DayOfWeek.Sunday && index.DayOfWeek != DayOfWeek.Saturday)
+                {
+                    bool excluded = false;
+                    if (!excluded)
+                        count++;
+                }
+            }
+            return count;
+        }
+        public static int BillingDaysWithDateExclusion(DateTime startDate, DateTime endDate, Boolean excludeWeekends, List<DateTime> excludeDates)
+        {
+            int count = 0;
+            for (DateTime index = startDate; index < endDate; index = index.AddDays(1))
+            {
+                if (excludeWeekends && index.DayOfWeek != DayOfWeek.Sunday && index.DayOfWeek != DayOfWeek.Saturday)
+                {
+                    bool excluded = false; ;
+                    for (int i = 0; i < excludeDates.Count; i++)
+                    {
+                        if (index.Date.CompareTo(excludeDates[i].Date) == 0)
+                        {
+                            excluded = true;
+                            break;
+                        }
+                    }
+
+                    if (!excluded)
+                        count++;
+                }
+            }
+            return count;
+        }
     }
 }
