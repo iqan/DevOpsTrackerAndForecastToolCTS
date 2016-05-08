@@ -198,7 +198,7 @@ namespace ExcelProc
                             res.ProjectName = (string)row[1];
                             res.ResourceName =  (string)row[2];
                             res.BillingPeriod = "na";
-                            res.Rate = (int)row[8];
+                            res.Rate = int.Parse((string)row[8]);
                             res.Leaves = 0;
                             res.BillingDays = 20;
                             res.TotalBilling = res.Rate * res.BillingDays;
@@ -209,6 +209,7 @@ namespace ExcelProc
                     //DataRow[] dr = dt.AsEnumerable().Where(dr => dr.Field<string>("Resource Name") == "put name");
                     ws.InsertRow(2, resources.Count() + 1);
                     int i = 2;
+
 
                     foreach (var res in resources)
                     {
@@ -227,8 +228,6 @@ namespace ExcelProc
                     ws.Cells[ws.Dimension.Address].AutoFitColumns();
                     xp.Save();
                 }
-
-                InfoLabel.Content = "File exported successfully.";
                 MessageBox.Show("File Exported successfully.", "Export sucessful");
             }
             catch (Exception ex)
@@ -355,6 +354,47 @@ namespace ExcelProc
         {
             InfoLabel.Content = "";
         }
+
+        private void FromMonth_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "Select starting Month.";
+        }
+
+        private void FromMonth_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "";
+        }
+
+        private void FromYear_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "Select starting Year.";
+        }
+
+        private void FromYear_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "";
+        }
+
+        private void ToMonth_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "Select ending Month.";
+        }
+
+        private void ToMonth_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "";
+        }
+
+        private void ToYear_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "Select ending Year.";
+        }
+
+        private void ToYear_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            InfoLabel.Content = "";
+        }
+
         #endregion
 
         #region Set some properties
@@ -378,6 +418,28 @@ namespace ExcelProc
                 FromMonth.Items.Add(month);
                 ToMonth.Items.Add(month);
             }
+        }
+
+        #endregion
+
+        #region selecting month and year
+        private void FromMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            App.Current.Properties["FromMon"] = FromMonth.SelectedItem;
+        }
+        private void FromYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            App.Current.Properties["FromYear"] = FromYear.SelectedItem;
+        }
+
+        private void ToMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            App.Current.Properties["ToMon"] = ToMonth.SelectedItem;
+        }
+
+        private void ToYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            App.Current.Properties["ToYear"] = ToYear.SelectedItem;
         }
 
         #endregion
