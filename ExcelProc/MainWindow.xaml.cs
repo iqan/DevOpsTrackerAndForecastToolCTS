@@ -20,6 +20,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using MessageBox = System.Windows.MessageBox;
 using OfficeOpenXml.Style;
+using System.Globalization;
 
 namespace ExcelProc
 {
@@ -206,10 +207,12 @@ namespace ExcelProc
                         }
                     }
                     
-                    ws.InsertRow(2, resources.Count() + 1);
+                    ws.InsertRow(2, (resources.Count() + 1) * 12);
                     int i = 2;
+                    int fy = int.Parse((string)App.Current.Properties["FromYear"]);
+                    int fm = (int)App.Current.Properties["FromMon"];
+                    DateTime fromDate = new DateTime(fy,fm,1);
 
-                    DateTime fromDate = new DateTime((int)App.Current.Properties["FromYear"], (int)App.Current.Properties["FromMon"],1);
                     int x = 0;
                     switch ((int)App.Current.Properties["ToMon"])
                     {
@@ -229,8 +232,11 @@ namespace ExcelProc
                             x = 30;
                             break;
                     }
-                    DateTime toDate = new DateTime((int)App.Current.Properties["ToYear"], (int)App.Current.Properties["ToMon"],x);
+                    int ty = int.Parse((string)App.Current.Properties["ToYear"]);
+                    int tm = (int)App.Current.Properties["ToMon"];
+                    DateTime toDate = new DateTime(ty,tm,x);
 
+                    int bilDates = BillingDays(fromDate, toDate);
 
                     foreach (var res in resources)
                     {
@@ -446,21 +452,31 @@ namespace ExcelProc
         #region selecting month and year
         private void FromMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            App.Current.Properties["FromMon"] = FromMonth.SelectedItem;
+            var month = FromMonth.SelectedItem;
+            if (!month.ToString().Contains("Select"))
+            {
+                App.Current.Properties["FromMon"] = DateTime.ParseExact((string)month, "MMMM", null).Month;
+            }
         }
         private void FromYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            App.Current.Properties["FromYear"] = FromYear.SelectedItem;
+            var year = FromYear.SelectedItem;
+            if (!year.ToString().Contains("Year"))
+                App.Current.Properties["FromYear"] = FromYear.SelectedItem;
         }
 
         private void ToMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            App.Current.Properties["ToMon"] = ToMonth.SelectedItem;
+            var month = ToMonth.SelectedItem;
+            if (!month.ToString().Contains("Select"))
+                App.Current.Properties["ToMon"] = DateTime.ParseExact((string)month, "MMMM", null).Month;
         }
 
         private void ToYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            App.Current.Properties["ToYear"] = ToYear.SelectedItem;
+            var year = ToYear.SelectedItem;
+            if (!year.ToString().Contains("Year"))
+                App.Current.Properties["ToYear"] = ToYear.SelectedItem;
         }
 
         #endregion
