@@ -91,6 +91,7 @@ namespace ExcelProc
                     }
                 }
                 BtnPreviewImport.IsEnabled = true;
+                ImportSheetName.IsEnabled = true;
             }
             catch (Exception e)
             {
@@ -131,7 +132,13 @@ namespace ExcelProc
             ExportPath.FontStyle = FontStyles.Italic;
             ExportPath.Text = App.Current.Properties["esName"].ToString();
             if (App.Current.Properties["esName"].ToString() != string.Empty)
+            {
                 BtnExport_Do.IsEnabled = true;
+                FromMonth.IsEnabled = true;
+                ToMonth.IsEnabled = true;
+                FromYear.IsEnabled = true;
+                ToYear.IsEnabled = true;
+            }   
         }
 
         private void BtnExport_Do_Click(object sender, RoutedEventArgs e)
@@ -179,9 +186,48 @@ namespace ExcelProc
                         range.Style.ShrinkToFit = false;
                     }
 
+                    //var resources = dt.AsEnumerable().Select(r => r.Field<int>("Resource Name")).ToList();
+                    List<Resource> resources = new List<Resource>(dt.Rows.Count);
+                    
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        if (row["Resource Name"].ToString() != "")
+                        {
+                            Resource res = new Resource();
+                            res.ProjectId = (string)row[0];
+                            res.ProjectName = (string)row[1];
+                            res.ResourceName =  (string)row[2];
+                            res.BillingPeriod = "na";
+                            res.Rate = (int)row[8];
+                            res.Leaves = 0;
+                            res.BillingDays = 20;
+                            res.TotalBilling = res.Rate * res.BillingDays;
+                            resources.Add(res);
+                        }
+                    }
+
+                    //DataRow[] dr = dt.AsEnumerable().Where(dr => dr.Field<string>("Resource Name") == "put name");
+                    ws.InsertRow(2, resources.Count() + 1);
+                    int i = 2;
+
+                    foreach (var res in resources)
+                    {
+                        ws.Cells[i, 1].Value = "Month";
+                        ws.Cells[i, 2].Value = res.ProjectId;
+                        ws.Cells[i, 3].Value = res.ProjectName;
+                        ws.Cells[i, 4].Value = res.ResourceName;
+                        ws.Cells[i, 5].Value = res.BillingPeriod;
+                        ws.Cells[i, 6].Value = res.Rate;
+                        ws.Cells[i, 7].Value = res.Leaves;
+                        ws.Cells[i, 8].Value = res.BillingDays;
+                        ws.Cells[i, 9].Value = res.TotalBilling;
+                        i++;
+                    }
+
                     ws.Cells[ws.Dimension.Address].AutoFitColumns();
                     xp.Save();
                 }
+
                 InfoLabel.Content = "File exported successfully.";
                 MessageBox.Show("File Exported successfully.", "Export sucessful");
             }
