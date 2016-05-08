@@ -68,7 +68,7 @@ namespace ExcelProc
             string str = string.Empty;
             if (App.Current.Properties["isName"].ToString() != string.Empty)
                 str = App.Current.Properties["isName"].ToString();
-            tbl = PreviewExcel(ImportPath.Text, str);
+            tbl = ExcelSheetToDataTable(ImportPath.Text, str);
             if (tbl != null)
             {
                 PreviewFile.DataContext = tbl.DefaultView;
@@ -106,7 +106,7 @@ namespace ExcelProc
             var tbl = new DataTable();
 
             //MessageBox.Show("prop esName = " + str);
-            tbl = PreviewExcel(ExportPath.Text, string.Empty);
+            tbl = ExcelSheetToDataTable(ExportPath.Text, string.Empty);
             if (tbl != null)
             {
                 PreviewFile.DataContext = tbl.DefaultView;
@@ -141,7 +141,7 @@ namespace ExcelProc
 
             if (App.Current.Properties["isName"].ToString() != string.Empty)
                 impSheet = App.Current.Properties["isName"].ToString();
-            DataTable dt = PreviewExcel(ImportPath.Text, impSheet);
+            DataTable dt = ExcelSheetToDataTable(ImportPath.Text, impSheet);
             
             ExportToExcel(dt, destUrl);
         }
@@ -163,7 +163,7 @@ namespace ExcelProc
                     ws.Cells["A1"].Value = "Month";
                     ws.Cells["B1"].Value = "Project#";
                     ws.Cells["C1"].Value = "Project Name";
-                    ws.Cells["D1"].Value = "Resources";
+                    ws.Cells["D1"].Value = "Resource Name";
                     ws.Cells["E1"].Value = "Billing Period";
                     ws.Cells["F1"].Value = "Rate";
                     ws.Cells["G1"].Value = "Leaves";
@@ -194,7 +194,7 @@ namespace ExcelProc
         #endregion
 
         //Common Methods
-        private DataTable PreviewExcel(string path,string sName)
+        private DataTable ExcelSheetToDataTable(string path,string sName)
         {
             try
             {
