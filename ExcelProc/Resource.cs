@@ -8,7 +8,7 @@ namespace ExcelProc
 {
     class Resource
     {
-        public string ProjectId { get; set; }
+        public long ProjectId { get; set; }
         public string ProjectName { get; set; }
         public string ResourceName { get; set; }
         public string BillingPeriod { get; set; }

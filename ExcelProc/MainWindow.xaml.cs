@@ -182,7 +182,7 @@ namespace ExcelProc
                     {
                         range.Style.Font.Bold = true;
                         range.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.YellowGreen);
+                        range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightCoral);
                         range.Style.Font.Color.SetColor(System.Drawing.Color.Black);
                         range.Style.ShrinkToFit = false;
                     }
@@ -195,7 +195,7 @@ namespace ExcelProc
                         if (row["Resource Name"].ToString() != "")
                         {
                             Resource res = new Resource();
-                            res.ProjectId = (string)row[0];
+                            res.ProjectId = long.Parse((string)row[0]);
                             res.ProjectName = (string)row[1];
                             res.ResourceName =  (string)row[2];
                             res.BillingPeriod = "na";
@@ -238,18 +238,23 @@ namespace ExcelProc
 
                     int bilDates = BillingDays(fromDate, toDate);
 
-                    foreach (var res in resources)
+                    for (DateTime index = fromDate; index < toDate; index = index.AddMonths(1))
                     {
-                        ws.Cells[i, 1].Value = "Month";
-                        ws.Cells[i, 2].Value = res.ProjectId;
-                        ws.Cells[i, 3].Value = res.ProjectName;
-                        ws.Cells[i, 4].Value = res.ResourceName;
-                        ws.Cells[i, 5].Value = res.BillingPeriod;
-                        ws.Cells[i, 6].Value = res.Rate;
-                        ws.Cells[i, 7].Value = res.Leaves;
-                        ws.Cells[i, 8].Value = res.BillingDays;
-                        ws.Cells[i, 9].Value = res.TotalBilling;
-                        i++;
+                        foreach (var res in resources)
+                        {
+                            var mn = new System.Globalization.DateTimeFormatInfo();
+                            string m = mn.GetAbbreviatedMonthName(index.Month);
+                            ws.Cells[i, 1].Value = mn.GetAbbreviatedMonthName(index.Month) + "-" + index.ToString("yy");
+                            ws.Cells[i, 2].Value = res.ProjectId;
+                            ws.Cells[i, 3].Value = res.ProjectName;
+                            ws.Cells[i, 4].Value = res.ResourceName;
+                            ws.Cells[i, 5].Value = res.BillingPeriod;
+                            ws.Cells[i, 6].Value = res.Rate;
+                            ws.Cells[i, 7].Value = res.Leaves;
+                            ws.Cells[i, 8].Value = res.BillingDays;
+                            ws.Cells[i, 9].Value = res.TotalBilling;
+                            i++;
+                        }
                     }
 
                     ws.Cells[ws.Dimension.Address].AutoFitColumns();
