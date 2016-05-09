@@ -211,6 +211,9 @@ namespace ExcelProc
                     int i = 2;
                     int fy = int.Parse((string)App.Current.Properties["FromYear"]);
                     int fm = (int)App.Current.Properties["FromMon"];
+                    int ty = int.Parse((string)App.Current.Properties["ToYear"]);
+                    int tm = (int)App.Current.Properties["ToMon"];
+
                     DateTime fromDate = new DateTime(fy,fm,1);
 
                     int x = 0;
@@ -226,14 +229,13 @@ namespace ExcelProc
                             x = 31;
                             break;
                         case 2:
-                            x = 28;
+                            x = (ty % 4 == 0)? 29: 28;
                             break;
                         default:
                             x = 30;
                             break;
                     }
-                    int ty = int.Parse((string)App.Current.Properties["ToYear"]);
-                    int tm = (int)App.Current.Properties["ToMon"];
+
                     DateTime toDate = new DateTime(ty,tm,x);
 
                     int bilDates = BillingDays(fromDate, toDate);
