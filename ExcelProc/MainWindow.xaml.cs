@@ -234,6 +234,11 @@ namespace ExcelProc
                             break;
                     }
 
+                    DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
+                    var cal = dfi.Calendar;
+                    var week = cal.GetWeekOfYear(DateTime.Parse("28-Mar-16"), dfi.CalendarWeekRule,
+                        dfi.FirstDayOfWeek);
+
                     DateTime fromDate = new DateTime(fy, fm, 1);
                     DateTime toDate = new DateTime(ty,tm,x);
 
@@ -244,12 +249,13 @@ namespace ExcelProc
                         foreach (var res in resources)
                         {
                             var mn = new System.Globalization.DateTimeFormatInfo();
+
                             string m = mn.GetAbbreviatedMonthName(index.Month);
                             ws.Cells[i, 1].Value = mn.GetAbbreviatedMonthName(index.Month) + "-" + index.ToString("yy");
                             ws.Cells[i, 2].Value = res.ProjectId;
                             ws.Cells[i, 3].Value = res.ProjectName;
                             ws.Cells[i, 4].Value = res.ResourceName;
-                            ws.Cells[i, 5].Value = "From " + index.ToString("MMM dd") + " till " + index.ToString("MMM dd");
+                            ws.Cells[i, 5].Value = "From " + index.ToString("dd MMM") + " till " + index.ToString("dd MMM");
                             ws.Cells[i, 6].Value = res.Rate;
                             ws.Cells[i, 7].Value = res.Leaves;
                             ws.Cells[i, 8].Value = res.BillingDays;
@@ -526,5 +532,6 @@ namespace ExcelProc
             }
             return count;
         }
+
     }
 }
