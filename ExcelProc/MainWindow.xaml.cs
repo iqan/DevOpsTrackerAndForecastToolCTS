@@ -207,16 +207,14 @@ namespace ExcelProc
                         }
                     }
                     
-                    ws.InsertRow(2, (resources.Count() + 1) * 12);
                     int i = 2;
                     int fy = int.Parse((string)App.Current.Properties["FromYear"]);
                     int fm = (int)App.Current.Properties["FromMon"];
                     int ty = int.Parse((string)App.Current.Properties["ToYear"]);
                     int tm = (int)App.Current.Properties["ToMon"];
 
-                    DateTime fromDate = new DateTime(fy,fm,1);
-
                     int x = 0;
+
                     switch ((int)App.Current.Properties["ToMon"])
                     {
                         case 1:
@@ -236,6 +234,7 @@ namespace ExcelProc
                             break;
                     }
 
+                    DateTime fromDate = new DateTime(fy, fm, 1);
                     DateTime toDate = new DateTime(ty,tm,x);
 
                     int bilDates = BillingDays(fromDate, toDate);
@@ -250,7 +249,7 @@ namespace ExcelProc
                             ws.Cells[i, 2].Value = res.ProjectId;
                             ws.Cells[i, 3].Value = res.ProjectName;
                             ws.Cells[i, 4].Value = res.ResourceName;
-                            ws.Cells[i, 5].Value = res.BillingPeriod;
+                            ws.Cells[i, 5].Value = "From " + index.ToString("MMM dd") + " till " + index.ToString("MMM dd");
                             ws.Cells[i, 6].Value = res.Rate;
                             ws.Cells[i, 7].Value = res.Leaves;
                             ws.Cells[i, 8].Value = res.BillingDays;
@@ -441,7 +440,7 @@ namespace ExcelProc
             FromYear.Items.Add("Year");
             ToYear.Items.Add("Year");
 
-            for (int i = 2015; i < 2099; i++)
+            for (int i = 2016; i <= 2017; i++)
             {
                 FromYear.Items.Add(i.ToString());
                 ToYear.Items.Add(i.ToString());
