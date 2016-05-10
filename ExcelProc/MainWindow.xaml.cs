@@ -256,7 +256,7 @@ namespace ExcelProc
                             ws.Cells[i, 2].Value = res.ProjectId;
                             ws.Cells[i, 3].Value = res.ProjectName;
                             ws.Cells[i, 4].Value = res.ResourceName;
-                            ws.Cells[i, 5].Value = billingPeriod;
+                            ws.Cells[i, 5].Value = getBillingPeriod(index);
                             ws.Cells[i, 6].Value = res.Rate;
                             ws.Cells[i, 7].Value = res.Leaves;
                             ws.Cells[i, 8].Value = res.BillingDays;
@@ -442,6 +442,7 @@ namespace ExcelProc
         public void SetComboboxItems()
         {
             var months = System.Globalization.DateTimeFormatInfo.InvariantInfo.MonthNames;
+
             FromMonth.Items.Add("Select Month");
             ToMonth.Items.Add("Select Month");
             FromYear.Items.Add("Year");
@@ -449,13 +450,29 @@ namespace ExcelProc
 
             for (int i = 2016; i <= 2017; i++)
             {
-                FromYear.Items.Add(i.ToString());
                 ToYear.Items.Add(i.ToString());
+            }
+
+            for (int i = 2016; i <= 2016; i++)
+            {
+                FromYear.Items.Add(i.ToString());
             }
 
             foreach (var month in months)
             {
-                FromMonth.Items.Add(month);
+                try
+                {
+                    int d = Convert.ToDateTime(month + " 01, 2000").Month;
+                    if (System.DateTime.Now.Month <= d)
+                    {
+                        FromMonth.Items.Add(month);
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
+                
                 ToMonth.Items.Add(month);
             }
         }
@@ -499,6 +516,9 @@ namespace ExcelProc
         private string getBillingPeriod(DateTime index)
         {
             List<string> bp = new List<string>();
+            bp.Add("From 26th Dec till 20th Jan");
+            bp.Add("From 23rd Jan till 24th Feb");
+            bp.Add("From 27th Feb till 24th Mar"); 
             bp.Add("From 28th Mar till 22nd Apr");
             bp.Add("From 25th Apr till 27th May");
             bp.Add("From 30th May till 24th Jun");
@@ -506,11 +526,8 @@ namespace ExcelProc
             bp.Add("From 25th Jul till 26th Aug");
             bp.Add("From 29th Aug till 23rd Sep");
             bp.Add("From 26th Sep till 21st Oct");
-            bp.Add("From 24th Oct till 25th Nov"); //24-Oct-16	25-Nov-16
-            bp.Add("From 28th Nov till 23rd Dec"); //28-Nov-16	23-Dec-16
-            bp.Add("From 26th Mar till 20th Jan"); //26-Dec-16	20-Jan-17
-            bp.Add("From 23rd Mar till 24th Feb"); //23-Jan-17	24-Feb-17
-            bp.Add("From 27th Mar till 24th Mar"); //27-Feb-17	24-Mar-17
+            bp.Add("From 24th Oct till 25th Nov"); 
+            bp.Add("From 28th Nov till 23rd Dec"); 
             
             return bp[index.Month-1];
         }
