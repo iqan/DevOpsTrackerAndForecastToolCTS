@@ -249,13 +249,14 @@ namespace ExcelProc
                         foreach (var res in resources)
                         {
                             var mn = new System.Globalization.DateTimeFormatInfo();
-
                             string m = mn.GetAbbreviatedMonthName(index.Month);
+
+                            string billingPeriod = getBillingPeriod(index);
                             ws.Cells[i, 1].Value = mn.GetAbbreviatedMonthName(index.Month) + "-" + index.ToString("yy");
                             ws.Cells[i, 2].Value = res.ProjectId;
                             ws.Cells[i, 3].Value = res.ProjectName;
                             ws.Cells[i, 4].Value = res.ResourceName;
-                            ws.Cells[i, 5].Value = "From " + index.ToString("dd MMM") + " till " + index.ToString("dd MMM");
+                            ws.Cells[i, 5].Value = billingPeriod;
                             ws.Cells[i, 6].Value = res.Rate;
                             ws.Cells[i, 7].Value = res.Leaves;
                             ws.Cells[i, 8].Value = res.BillingDays;
@@ -492,6 +493,27 @@ namespace ExcelProc
         }
 
         #endregion
+
+
+        // Get billing period
+        private string getBillingPeriod(DateTime index)
+        {
+            List<string> bp = new List<string>();
+            bp.Add("From 28th Mar till 22nd Apr");
+            bp.Add("From 25th Apr till 27th May");
+            bp.Add("From 30th May till 24th Jun");
+            bp.Add("From 27th Jun till 22nd July");
+            bp.Add("From 25th Jul till 26th Aug");
+            bp.Add("From 29th Aug till 23rd Sep");
+            bp.Add("From 26th Sep till 21st Oct");
+            bp.Add("From 24th Oct till 25th Nov"); //24-Oct-16	25-Nov-16
+            bp.Add("From 28th Nov till 23rd Dec"); //28-Nov-16	23-Dec-16
+            bp.Add("From 26th Mar till 20th Jan"); //26-Dec-16	20-Jan-17
+            bp.Add("From 23rd Mar till 24th Feb"); //23-Jan-17	24-Feb-17
+            bp.Add("From 27th Mar till 24th Mar"); //27-Feb-17	24-Mar-17
+            
+            return bp[index.Month-1];
+        }
 
         //getting total days
 
