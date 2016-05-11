@@ -277,7 +277,7 @@ namespace ExcelProc
                             ws.Cells[i, 5].Value = getBillingPeriod(index);
                             ws.Cells[i, 6].Value = res.Rate;
                             ws.Cells[i, 7].Value = res.Leaves;
-                            ws.Cells[i, 8].Value = res.BillingDays;
+                            ws.Cells[i, 8].Value = GetBillingDaysInMonth(index.Month) * 5;
                             ws.Cells[i, 9].Value = res.TotalBilling;
                             i++;
                         }
@@ -588,6 +588,24 @@ namespace ExcelProc
                 }
             }
             return count;
+        }
+
+        private int GetBillingDaysInMonth(int m)
+        {
+            List<int> days = new List<int>();
+            days.Add(5);
+            days.Add(4);
+            days.Add(4);
+            days.Add(5);
+            days.Add(4);
+            days.Add(4);
+            days.Add(5);
+            days.Add(4);
+            days.Add(4);
+            days.Add(5);
+            days.Add(4);
+            days.Add(4);
+            return days[m - 1];
         }
 
     }
