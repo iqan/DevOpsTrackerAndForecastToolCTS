@@ -268,14 +268,12 @@ namespace ExcelProc
                         foreach (var res in resources)
                         {
                             var mn = new System.Globalization.DateTimeFormatInfo();
-                            string m = mn.GetAbbreviatedMonthName(index.Month);
-
-                            string billingPeriod = getBillingPeriod(index);
+                            DateTime[] bps = GetBillingPeriod(index);
                             ws.Cells[i, 1].Value = mn.GetAbbreviatedMonthName(index.Month) + "-" + index.ToString("yy");
                             ws.Cells[i, 2].Value = res.ProjectId;
                             ws.Cells[i, 3].Value = res.ProjectName;
                             ws.Cells[i, 4].Value = res.ResourceName;
-                            ws.Cells[i, 5].Value = getBillingPeriod(index);
+                            ws.Cells[i, 5].Value = "From " + bps[0].ToString("MMM") + " " + bps[0].Day + " till " + bps[1].ToString("MMM") + " " + bps[1].Day;
                             ws.Cells[i, 6].Value = res.Rate;
                             ws.Cells[i, 7].Value = res.Leaves;
                             ws.Cells[i, 8].Value = GetBillingDaysInMonth(index.Month) * 5;
@@ -532,23 +530,39 @@ namespace ExcelProc
 
 
         // Get billing period
-        private string getBillingPeriod(DateTime index)
+        private DateTime[] GetBillingPeriod(DateTime index)
         {
-            List<string> bp = new List<string>();
-            bp.Add("From 26th Dec till 20th Jan");
-            bp.Add("From 23rd Jan till 24th Feb");
-            bp.Add("From 27th Feb till 24th Mar"); 
-            bp.Add("From 28th Mar till 22nd Apr");
-            bp.Add("From 25th Apr till 27th May");
-            bp.Add("From 30th May till 24th Jun");
-            bp.Add("From 27th Jun till 22nd July");
-            bp.Add("From 25th Jul till 26th Aug");
-            bp.Add("From 29th Aug till 23rd Sep");
-            bp.Add("From 26th Sep till 21st Oct");
-            bp.Add("From 24th Oct till 25th Nov"); 
-            bp.Add("From 28th Nov till 23rd Dec"); 
+            List<DateTime> billingPS = new List<DateTime>();
+            List<DateTime> billingES = new List<DateTime>();
+            billingPS.Add(DateTime.Parse("26-Dec-16"));
+            billingES.Add(DateTime.Parse("20-Jan-17"));
+            billingPS.Add(DateTime.Parse("23-Jan-17"));
+            billingES.Add(DateTime.Parse("24-Feb-17"));
+            billingPS.Add(DateTime.Parse("27-Feb-17"));
+            billingES.Add(DateTime.Parse("24-Mar-17"));
+            billingPS.Add(DateTime.Parse("28-Mar-16"));
+            billingES.Add(DateTime.Parse("22-Apr-16"));
+            billingPS.Add(DateTime.Parse("25-Apr-16"));
+            billingES.Add(DateTime.Parse("27-May-16"));
+            billingPS.Add(DateTime.Parse("30-May-16"));
+            billingES.Add(DateTime.Parse("24-Jun-16"));
+            billingPS.Add(DateTime.Parse("27-Jun-16"));
+            billingES.Add(DateTime.Parse("22-Jul-16"));
+            billingPS.Add(DateTime.Parse("25-Jul-16"));
+            billingES.Add(DateTime.Parse("26-Aug-16"));
+            billingPS.Add(DateTime.Parse("29-Aug-16"));
+            billingES.Add(DateTime.Parse("23-Sep-16"));
+            billingPS.Add(DateTime.Parse("26-Sep-16"));
+            billingES.Add(DateTime.Parse("21-Oct-16"));
+            billingPS.Add(DateTime.Parse("24-Oct-16"));
+            billingES.Add(DateTime.Parse("25-Nov-16"));
+            billingPS.Add(DateTime.Parse("28-Nov-16"));
+            billingES.Add(DateTime.Parse("23-Dec-16"));
+
+            //return bp[index.Month-1];
+            DateTime[] temp = {billingPS[index.Month - 1], billingES [index.Month - 1]};
             
-            return bp[index.Month-1];
+            return  temp;
         }
 
         //getting total days
