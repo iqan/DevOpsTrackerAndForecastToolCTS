@@ -16,5 +16,7 @@ namespace ExcelProc
         public int Leaves { get; set; }
         public int BillingDays { get; set; }
         public int TotalBilling { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 }

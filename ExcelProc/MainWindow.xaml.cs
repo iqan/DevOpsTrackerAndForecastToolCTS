@@ -203,6 +203,8 @@ namespace ExcelProc
                             res.Leaves = 0;
                             res.BillingDays = 20;
                             res.TotalBilling = res.Rate * res.BillingDays;
+                            res.EndDate = DateTime.Parse((string) row[7]);
+                            res.StartDate = DateTime.Parse((string)row[6]);
                             resources.Add(res);
                         }
                     }
@@ -245,7 +247,6 @@ namespace ExcelProc
                                     x = 29;
                                 else
                                     x = 28;
-
                                 break;
                             default:
                                 x = 30;
