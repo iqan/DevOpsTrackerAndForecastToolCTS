@@ -128,17 +128,41 @@ namespace ExcelProc
                         foreach (var res in resources)
                         {
                             var mn = new DateTimeFormatInfo();
-                            DateTime[] bps = GetBillingPeriod(index);
-                            ws.Cells[i, 1].Value = mn.GetAbbreviatedMonthName(index.Month) + "-" + index.ToString("yy");
-                            ws.Cells[i, 2].Value = res.ProjectId;
-                            ws.Cells[i, 3].Value = res.ProjectName;
-                            ws.Cells[i, 4].Value = res.ResourceName;
-                            ws.Cells[i, 5].Value = "From " + bps[0].ToString("MMM") + " " + bps[0].Day + " till " + bps[1].ToString("MMM") + " " + bps[1].Day;
-                            ws.Cells[i, 6].Value = res.Rate;
-                            ws.Cells[i, 7].Value = res.Leaves;
-                            ws.Cells[i, 8].Value = GetBillingDaysInMonth(index.Month) * 5;
-                            ws.Cells[i, 9].Value = res.TotalBilling;
-                            i++;
+                            int days = 0;
+                            int count = 0;
+                            
+                            DateRange range = new DateRange(res.StartDate, res.EndDate);
+
+                            for (DateTime index2 = index; index2 < index.AddMonths(1); index2 = index2.AddDays(1))
+                            {
+                                DateTime[] bps = GetBillingPeriod(index2);
+                                 
+                                if (range.Includes(index))
+                                {
+                                    if (res.StartDate >= bps[0])
+                                        days = BillingDays(res.StartDate, bps[1]);
+                                    else if (res.EndDate <= bps[1])
+                                        days = BillingDays(bps[0], res.EndDate);
+                                    else
+                                        days = BillingDays(bps[0], bps[1]);
+
+                                    if (index2 == bps[1] && count == 0)
+                                    {
+                                        ws.Cells[i, 1].Value = mn.GetAbbreviatedMonthName(index.Month) + "-" + index.ToString("yy");
+                                        ws.Cells[i, 2].Value = res.ProjectId;
+                                        ws.Cells[i, 3].Value = res.ProjectName;
+                                        ws.Cells[i, 4].Value = res.ResourceName;
+                                        ws.Cells[i, 5].Value = "From " + bps[0].ToString("MMM") + " " + bps[0].Day + " till " + bps[1].ToString("MMM") + " " + bps[1].Day;
+                                        ws.Cells[i, 6].Value = res.Rate;
+                                        ws.Cells[i, 7].Value = res.Leaves;
+                                        ws.Cells[i, 8].Value = days;
+                                        ///ws.Cells[i, 8].Value = GetBillingDaysInMonth(index.Month) * 5;
+                                        ws.Cells[i, 9].Value = days * res.Rate;
+                                        i++;
+                                        count++;
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -248,5 +272,38 @@ namespace ExcelProc
             days.Add(4);
             return days[m - 1];
         }
+    }
+
+    public interface IRange<T>
+    {
+        T Start { get; }
+        T End { get; }
+        bool Includes(T value);
+        bool Includes(IRange<T> range);
+    }
+    public class DateRange : IRange<DateTime>
+    {
+        public DateRange(DateTime start, DateTime end)
+        {
+            Start = start;
+            End = end;
+        }
+
+        public DateTime Start { get; private set; }
+        public DateTime End { get; private set; }
+
+        public bool Includes(DateTime value)
+        {
+            return (Start <= value) && (value <= End);
+        }
+
+        public bool Includes(IRange<DateTime> range)
+        {
+            return (Start <= range.Start) && (range.End <= End);
+        }
+
+        //usage
+        //DateRange range = new DateRange(startDate, endDate);
+        //range.Includes(date);
     }
 }

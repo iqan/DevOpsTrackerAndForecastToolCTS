@@ -1,9 +1,9 @@
 ﻿<Window x:Class="ExcelProc.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Ops Tracker and Forecast Tool - 2016-2017" Height="648.5" Width="800" Icon="cognizant-icon.png">
+        Title="DevOps Tracker and Forecast Tool - 2016/17" Height="648.5" Width="800" Icon="cognizant-icon.png">
     <Grid Name="MainGrid" Margin="0,0,2,-1" Background="GhostWhite">
-        <DataGrid Name="PreviewFile" Margin="10,244,10,56" Visibility="Hidden" ItemsSource="{Binding}"/>
+        <DataGrid Name="PreviewFile" Margin="10,274,10,30" Visibility="Hidden" ItemsSource="{Binding}"/>
         <Image Name="Logo" HorizontalAlignment="Left" Height="54" Margin="10,10,0,0" VerticalAlignment="Top" Width="171" Source="Cognizant_LOGO.png"/>
         <TextBox Name="ImportPath" HorizontalAlignment="Left" Height="22" Margin="106,94,0,0" VerticalAlignment="Top" Width="419" Focusable="False" MaxLines="1"/>
         <ComboBox Name="ImportSheetName" Text="Select Sheet" HorizontalAlignment="Left" Height="22" Margin="530,95,0,0" VerticalAlignment="Top" Width="136" ItemsSource="{Binding}" SelectionChanged="ImportSheetName_SelectionChanged" SelectedIndex="0" MouseLeave="ImportSheetName_MouseLeave" MouseEnter="ImportSheetName_MouseEnter" IsEnabled="False"/>
@@ -12,7 +12,6 @@
         <Button Name="BtnPreviewExport" Content="Output Preview" HorizontalAlignment="Left" Height="23" Margin="636,199,0,0" VerticalAlignment="Top" Width="125" Click="BtnExportPreview_Click" MouseEnter="BtnPreviewExport_MouseEnter" MouseLeave="BtnPreviewExport_MouseLeave" IsEnabled="False"/>
         <Label Name="Footer" Content="Created by - Iqan" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="25" Width="104" RenderTransformOrigin="-0.163,0.56"/>
         <Label x:Name="Footer_Copy" Content="© iqan.in" Height="25" Width="63" RenderTransformOrigin="-0.163,0.56" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-        <Label x:Name="InfoLabel" HorizontalAlignment="Left" Margin="10,562,0,0" VerticalAlignment="Top" Width="760" Height="26" FontSize="10.667" FontStyle="Italic"/>
         <Button x:Name="BtnImport" Content="Browse" HorizontalAlignment="Left" Height="22" Margin="19,95,0,0" VerticalAlignment="Top" Width="82" Click="BtnImport_Click" MouseLeave="BtnImport_MouseLeave" MouseEnter="BtnImport_MouseEnter"/>
         <Button x:Name="BtnExport" Content="Browse" HorizontalAlignment="Left" Height="23" Margin="19,171,0,0" VerticalAlignment="Top" Width="83" Click="BtnExport_Click" MouseLeave="BtnExport_MouseLeave" MouseEnter="BtnExport_MouseEnter"/>
         <Button x:Name="BtnExport_Do" Content="Export" HorizontalAlignment="Left" Height="23" Margin="530,199,0,0" VerticalAlignment="Top" Width="96" Click="BtnExport_Do_Click" MouseEnter="BtnExport_Do_MouseEnter" MouseLeave="BtnExport_Do_MouseLeave" IsEnabled="False"/>
@@ -27,6 +26,16 @@
         <Label x:Name="To" Content="To" HorizontalAlignment="Left" Height="24" Margin="330,199,0,0" VerticalAlignment="Top" Width="28" Foreground="Black" RenderTransformOrigin="1.393,0.542"/>
         <ComboBox x:Name="ToMonth" HorizontalAlignment="Left" Height="22" Margin="363,199,0,0" VerticalAlignment="Top" Width="101" ItemsSource="{Binding}" SelectedIndex="0" IsEnabled="False" SelectionChanged="ToMonth_SelectionChanged" MouseEnter="ToMonth_MouseEnter" MouseLeave="ToMonth_MouseLeave"/>
         <ComboBox x:Name="ToYear" Text="Select Sheet" HorizontalAlignment="Left" Height="22" Margin="469,199,0,0" VerticalAlignment="Top" Width="56" ItemsSource="{Binding}" SelectedIndex="0" IsEnabled="False" SelectionChanged="ToYear_SelectionChanged" MouseEnter="ToYear_MouseEnter" MouseLeave="ToYear_MouseLeave"/>
+        <Label x:Name="InfoLabel" HorizontalAlignment="Left" Margin="11,243,0,0" VerticalAlignment="Top" Width="768" Height="26" RenderTransformOrigin="0.5,0.5" FontFamily="Microsoft JhengHei Light" Content="">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-0.004"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
 
     </Grid>
 </Window>
