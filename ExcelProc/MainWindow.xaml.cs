@@ -208,32 +208,50 @@ namespace ExcelProc
                     }
                     
                     int i = 2;
-                    int fy = int.Parse((string)App.Current.Properties["FromYear"]);
-                    int fm = (int)App.Current.Properties["FromMon"];
-                    int ty = int.Parse((string)App.Current.Properties["ToYear"]);
-                    int tm = (int)App.Current.Properties["ToMon"];
 
-                    int x = 0;
-
-                    switch ((int)App.Current.Properties["ToMon"])
+                    int fy = System.DateTime.Now.Year;
+                    int fm = Convert.ToDateTime(System.DateTime.Now).Month; ;
+                    int ty = 2017;
+                    int tm = 3;
+                    if (App.Current.Properties["FromYear"] != null)
+                        fy = int.Parse((string) App.Current.Properties["FromYear"]);
+                    if (App.Current.Properties["FromMon"] != null)
+                        fm = (int)App.Current.Properties["FromMon"];
+                    if (App.Current.Properties["ToYear"] != null)
+                        ty = int.Parse((string)App.Current.Properties["ToYear"]);
+                    int x = 31;
+                    if (App.Current.Properties["ToMon"] != null)
                     {
-                        case 1:
-                        case 3:
-                        case 5:
-                        case 7:
-                        case 8:
-                        case 10:
-                        case 12:
-                            x = 31;
-                            break;
-                        case 2:
-                            x = (ty % 4 == 0)? 29: 28;
-                            break;
-                        default:
-                            x = 30;
-                            break;
-                    }
+                        tm = (int) App.Current.Properties["ToMon"];
 
+                        switch ((int) App.Current.Properties["ToMon"])
+                        {
+                            case 1:
+                            case 3:
+                            case 5:
+                            case 7:
+                            case 8:
+                            case 10:
+                            case 12:
+                                x = 31;
+                                break;
+                            case 2:
+                                //x = (ty % 4 == 0 && ty %400 ==0)? 29: 28;
+                                if (ty%400 == 0)
+                                    x = 29;
+                                else if (ty%100 == 0)
+                                    x = 28;
+                                else if (ty%4 == 0)
+                                    x = 29;
+                                else
+                                    x = 28;
+
+                                break;
+                            default:
+                                x = 30;
+                                break;
+                        }
+                    }
                     DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
                     var cal = dfi.Calendar;
                     var week = cal.GetWeekOfYear(DateTime.Parse("28-Mar-16"), dfi.CalendarWeekRule,
