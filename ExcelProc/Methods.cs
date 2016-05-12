@@ -220,7 +220,7 @@ namespace ExcelProc
         public static int BillingDays(DateTime startDate, DateTime endDate)
         {
             int count = 0;
-            for (DateTime index = startDate; index < endDate; index = index.AddDays(1))
+            for (DateTime index = startDate; index <= endDate; index = index.AddDays(1))
             {
                 if (index.DayOfWeek != DayOfWeek.Sunday && index.DayOfWeek != DayOfWeek.Saturday)
                 {
