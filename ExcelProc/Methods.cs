@@ -71,55 +71,13 @@ namespace ExcelProc
 
                     int i = 2;
 
-                    int fy = System.DateTime.Now.Year;
-                    int fm = Convert.ToDateTime(System.DateTime.Now).Month; ;
-                    int ty = 2017;
-                    int tm = 3;
-                    if (App.Current.Properties["FromYear"] != null)
-                        fy = int.Parse((string)App.Current.Properties["FromYear"]);
-                    if (App.Current.Properties["FromMon"] != null)
-                        fm = (int)App.Current.Properties["FromMon"];
-                    if (App.Current.Properties["ToYear"] != null)
-                        ty = int.Parse((string)App.Current.Properties["ToYear"]);
-                    int x = 31;
-                    if (App.Current.Properties["ToMon"] != null)
-                    {
-                        tm = (int)App.Current.Properties["ToMon"];
-
-                        switch ((int)App.Current.Properties["ToMon"])
-                        {
-                            case 1:
-                            case 3:
-                            case 5:
-                            case 7:
-                            case 8:
-                            case 10:
-                            case 12:
-                                x = 31;
-                                break;
-                            case 2:
-                                //x = (ty % 4 == 0 && ty %400 ==0)? 29: 28;
-                                if (ty % 400 == 0)
-                                    x = 29;
-                                else if (ty % 100 == 0)
-                                    x = 28;
-                                else if (ty % 4 == 0)
-                                    x = 29;
-                                else
-                                    x = 28;
-                                break;
-                            default:
-                                x = 30;
-                                break;
-                        }
-                    }
                     DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
                     var cal = dfi.Calendar;
                     var week = cal.GetWeekOfYear(DateTime.Parse("28-Mar-16"), dfi.CalendarWeekRule,
                         dfi.FirstDayOfWeek);
 
-                    DateTime fromDate = new DateTime(fy, fm, 1);
-                    DateTime toDate = new DateTime(ty, tm, x);
+                    DateTime fromDate = (DateTime)App.Current.Properties["FromDate"];
+                    DateTime toDate = (DateTime)App.Current.Properties["ToDate"];
 
                     int bilDates = BillingDays(fromDate, toDate);
 
@@ -128,9 +86,9 @@ namespace ExcelProc
                         foreach (var res in resources)
                         {
                             var mn = new DateTimeFormatInfo();
-                            int days = 0;
                             int count = 0;
-                            
+                            int days = 0;
+
                             DateRange range = new DateRange(res.StartDate, res.EndDate);
 
                             for (DateTime index2 = index; index2 < index.AddMonths(1); index2 = index2.AddDays(1))
@@ -179,6 +137,45 @@ namespace ExcelProc
             }
         }
 
+        public static DataTable ExcelSheetToDataTable(string path, string sName)
+        {
+            try
+            {
+                using (var pck = new OfficeOpenXml.ExcelPackage())
+                {
+                    using (var stream = File.OpenRead(path))
+                    {
+                        pck.Load(stream);
+                    }
+                    var ws = pck.Workbook.Worksheets.First();
+
+                    if (sName != string.Empty)
+                        ws = pck.Workbook.Worksheets[sName];
+
+                    DataTable tbl = new DataTable();
+                    foreach (var firstRowCell in ws.Cells[1, 1, 1, ws.Dimension.End.Column])
+                    {
+                        tbl.Columns.Add(firstRowCell.Text);
+                    }
+                    for (int rowNum = 2; rowNum <= ws.Dimension.End.Row; rowNum++)
+                    {
+                        var wsRow = ws.Cells[rowNum, 1, rowNum, ws.Dimension.End.Column];
+                        DataRow row = tbl.Rows.Add();
+                        foreach (var cell in wsRow)
+                        {
+                            row[cell.Start.Column - 1] = cell.Text;
+                        }
+                    }
+                    return tbl;
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error while reading file!");
+                return null;
+            }
+        }
+
         // Get billing period
         public static DateTime[] GetBillingPeriod(DateTime index)
         {
@@ -210,6 +207,19 @@ namespace ExcelProc
             billingES.Add(DateTime.Parse("23-Dec-16"));
 
             //return bp[index.Month-1];
+            DateTime[] temp = { billingPS[index.Month - 1], billingES[index.Month - 1] };
+
+            return temp;
+        }
+
+        public static DateTime[] GetBillingPeriodGeneral(DateTime index)
+        {
+            List<DateTime> billingPS = new List<DateTime>();
+            List<DateTime> billingES = new List<DateTime>();
+
+            DateTime tempDate = DateTime.Now.AddYears(2);
+            //Calendar cal = new ;
+            
             DateTime[] temp = { billingPS[index.Month - 1], billingES[index.Month - 1] };
 
             return temp;
