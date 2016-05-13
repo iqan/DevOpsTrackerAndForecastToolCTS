@@ -34,7 +34,7 @@ namespace ExcelProc
             App.Current.Properties["isName"] = string.Empty;
             App.Current.Properties["esName"] = string.Empty;
             InitializeComponent();
-            SetComboboxItems();
+            //SetComboboxItems();
         }
 
         #region Import Methods
@@ -69,9 +69,10 @@ namespace ExcelProc
             string str = string.Empty;
             if (App.Current.Properties["isName"].ToString() != string.Empty)
                 str = App.Current.Properties["isName"].ToString();
-            tbl = ExcelSheetToDataTable(ImportPath.Text, str);
+            tbl = Methods.ExcelSheetToDataTable(ImportPath.Text, str);
             if (tbl != null)
             {
+                BtnPreviewImport.IsEnabled = true;
                 PreviewFile.DataContext = tbl.DefaultView;
             }
         }
@@ -108,7 +109,7 @@ namespace ExcelProc
             var tbl = new DataTable();
 
             //MessageBox.Show("prop esName = " + str);
-            tbl = ExcelSheetToDataTable(ExportPath.Text, string.Empty);
+            tbl = Methods.ExcelSheetToDataTable(ExportPath.Text, string.Empty);
             if (tbl != null)
             {
                 PreviewFile.DataContext = tbl.DefaultView;
@@ -135,10 +136,8 @@ namespace ExcelProc
             if (App.Current.Properties["esName"].ToString() != string.Empty)
             {
                 BtnExport_Do.IsEnabled = true;
-                FromMonth.IsEnabled = true;
-                ToMonth.IsEnabled = true;
-                FromYear.IsEnabled = true;
-                ToYear.IsEnabled = true;
+                FromDate.IsEnabled = true;
+                ToDate.IsEnabled = true;
             }   
         }
 
@@ -149,60 +148,19 @@ namespace ExcelProc
 
             if (App.Current.Properties["isName"].ToString() != string.Empty)
                 impSheet = App.Current.Properties["isName"].ToString();
-            DataTable dt = ExcelSheetToDataTable(ImportPath.Text, impSheet);
+            DataTable dt = Methods.ExcelSheetToDataTable(ImportPath.Text, impSheet);
             
             int res = Methods.ExportToExcel(dt, destUrl);
 
             if (res == -1)
                 BtnPreviewExport.IsEnabled = false;
+            else
+                BtnPreviewExport.IsEnabled = true;
         }
 
         
         #endregion
 
-        //Common Methods
-        private DataTable ExcelSheetToDataTable(string path,string sName)
-        {
-            try
-            {
-                using (var pck = new OfficeOpenXml.ExcelPackage())
-                {
-                    using (var stream = File.OpenRead(path))
-                    {
-                        pck.Load(stream);
-                    }
-                    var ws = pck.Workbook.Worksheets.First();
-
-                    if (sName != string.Empty)
-                        ws = pck.Workbook.Worksheets[sName];
-
-                    DataTable tbl = new DataTable();
-                    foreach (var firstRowCell in ws.Cells[1, 1, 1, ws.Dimension.End.Column])
-                    {
-                        tbl.Columns.Add(firstRowCell.Text);
-                    }
-                    for (int rowNum = 2; rowNum <= ws.Dimension.End.Row; rowNum++)
-                    {
-                        var wsRow = ws.Cells[rowNum, 1, rowNum, ws.Dimension.End.Column];
-                        DataRow row = tbl.Rows.Add();
-                        foreach (var cell in wsRow)
-                        {
-                            row[cell.Start.Column - 1] = cell.Text;
-                        }
-                    }
-                    if (App.Current.Properties["esName"].ToString() != string.Empty)
-                    {
-                        BtnPreviewExport.IsEnabled = true;   
-                    }
-                    return tbl;
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Error while reading file!");
-                return null;
-            }
-        }
 
         #region Import sheet name and export file path with filename
                 private void ImportSheetName_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -215,183 +173,38 @@ namespace ExcelProc
                 }
         #endregion
 
-        #region user tips methods
-        // User Tips Methods
-        private void BtnImport_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "Select a file to Import.";
-        }
-
-        private void BtnImport_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "";
-        }
-
-        private void BtnExport_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "Select a folder to Export Excel file into.";
-        }
-
-        private void BtnExport_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "";
-        }
-
-        private void ImportSheetName_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "Select a Sheet.";
-        }
-
-        private void ImportSheetName_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "";
-        }
-
-        private void BtnPreviewImport_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "Click to see preview of selected worksheet.";
-        }
-
-        private void BtnPreviewImport_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "";
-        }
-
-        private void BtnPreviewExport_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "Click to see preview of exporting worksheet.";
-        }
-
-        private void BtnPreviewExport_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "";
-        }
-
-        private void BtnExport_Do_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "Click to export worksheet to file in selected folder.";
-        }
-
-        private void BtnExport_Do_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "";
-        }
-
-        private void FromMonth_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "Select starting Month.";
-        }
-
-        private void FromMonth_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "";
-        }
-
-        private void FromYear_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "Select starting Year.";
-        }
-
-        private void FromYear_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "";
-        }
-
-        private void ToMonth_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "Select ending Month.";
-        }
-
-        private void ToMonth_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "";
-        }
-
-        private void ToYear_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "Select ending Year.";
-        }
-
-        private void ToYear_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            InfoLabel.Content = "";
-        }
-
-        #endregion
 
         #region Set some properties
 
-        public void SetComboboxItems()
+        private void FromDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            var months = System.Globalization.DateTimeFormatInfo.InvariantInfo.MonthNames;
+            if (FromDate != null)
+                App.Current.Properties["FromDate"] = FromDate.SelectedDate;
+        }
 
-            FromMonth.Items.Add("Select Month");
-            ToMonth.Items.Add("Select Month");
-            FromYear.Items.Add("Year");
-            ToYear.Items.Add("Year");
-
-            for (int i = 2016; i <= 2017; i++)
-            {
-                ToYear.Items.Add(i.ToString());
-            }
-
-            for (int i = 2016; i <= 2016; i++)
-            {
-                FromYear.Items.Add(i.ToString());
-            }
-
-            foreach (var month in months)
-            {
-                try
-                {
-                    int d = Convert.ToDateTime(month + " 01, 2000").Month;
-                    if (System.DateTime.Now.Month <= d)
-                    {
-                        FromMonth.Items.Add(month);
-                    }
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                }
-                
-                ToMonth.Items.Add(month);
-            }
+        private void ToDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ToDate != null)
+                App.Current.Properties["ToDate"] = ToDate.SelectedDate;
         }
 
         #endregion
 
-        #region selecting month and year
-        private void FromMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void FromDate_DateValidationError(object sender, DatePickerDateValidationErrorEventArgs e)
         {
-            var month = FromMonth.SelectedItem;
-            if (!month.ToString().Contains("Select"))
-            {
-                App.Current.Properties["FromMon"] = DateTime.ParseExact((string)month, "MMMM", null).Month;
-            }
-        }
-        private void FromYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var year = FromYear.SelectedItem;
-            if (!year.ToString().Contains("Year"))
-                App.Current.Properties["FromYear"] = FromYear.SelectedItem;
+            MessageBox.Show("Entered date is not in proper format.", "Invalid Date");
         }
 
-        private void ToMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ToDate_DateValidationError(object sender, DatePickerDateValidationErrorEventArgs e)
         {
-            var month = ToMonth.SelectedItem;
-            if (!month.ToString().Contains("Select"))
-                App.Current.Properties["ToMon"] = DateTime.ParseExact((string)month, "MMMM", null).Month;
+            MessageBox.Show("Entered date is not in proper format.", "Invalid Date");
         }
 
-        private void ToYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var year = ToYear.SelectedItem;
-            if (!year.ToString().Contains("Year"))
-                App.Current.Properties["ToYear"] = ToYear.SelectedItem;
-        }
 
-        #endregion
+        //App.Current.Properties["FromMon"]
+        //var picker = sender as DatePicker;
 
+        // ... Get nullable DateTime from SelectedDate.
+        //DateTime? date = picker.SelectedDate;
     }
 }

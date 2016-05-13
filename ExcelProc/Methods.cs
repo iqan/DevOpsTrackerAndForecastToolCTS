@@ -55,88 +55,45 @@ namespace ExcelProc
                         if (row["Resource Name"].ToString() != "")
                         {
                             Resource res = new Resource();
-                            res.ProjectId = long.Parse((string)row[0]);
-                            res.ProjectName = (string)row[1];
-                            res.ResourceName = (string)row[2];
+                            res.ProjectId = long.Parse((string) row[0]);
+                            res.ProjectName = (string) row[1];
+                            res.ResourceName = (string) row[2];
                             res.BillingPeriod = "na";
-                            res.Rate = int.Parse((string)row[8]);
+                            res.Rate = int.Parse((string) row[8]);
                             res.Leaves = 0;
                             res.BillingDays = 20;
-                            res.TotalBilling = res.Rate * res.BillingDays;
-                            res.EndDate = DateTime.Parse((string)row[7]);
-                            res.StartDate = DateTime.Parse((string)row[6]);
+                            res.TotalBilling = res.Rate*res.BillingDays;
+                            res.EndDate = DateTime.Parse((string) row[7]);
+                            res.StartDate = DateTime.Parse((string) row[6]);
                             resources.Add(res);
                         }
                     }
 
                     int i = 2;
 
-                    int fy = System.DateTime.Now.Year;
-                    int fm = Convert.ToDateTime(System.DateTime.Now).Month; ;
-                    int ty = 2017;
-                    int tm = 3;
-                    if (App.Current.Properties["FromYear"] != null)
-                        fy = int.Parse((string)App.Current.Properties["FromYear"]);
-                    if (App.Current.Properties["FromMon"] != null)
-                        fm = (int)App.Current.Properties["FromMon"];
-                    if (App.Current.Properties["ToYear"] != null)
-                        ty = int.Parse((string)App.Current.Properties["ToYear"]);
-                    int x = 31;
-                    if (App.Current.Properties["ToMon"] != null)
-                    {
-                        tm = (int)App.Current.Properties["ToMon"];
+                    DateTime fromDate = System.DateTime.Today;
+                    DateTime toDate = new DateTime(fromDate.Year +1,3,31);
+                    if(App.Current.Properties["FromDate"] != null)
+                        fromDate = (DateTime) App.Current.Properties["FromDate"];
+                    if(App.Current.Properties["FromDate"] != null)
+                        toDate = (DateTime) App.Current.Properties["ToDate"];
 
-                        switch ((int)App.Current.Properties["ToMon"])
-                        {
-                            case 1:
-                            case 3:
-                            case 5:
-                            case 7:
-                            case 8:
-                            case 10:
-                            case 12:
-                                x = 31;
-                                break;
-                            case 2:
-                                //x = (ty % 4 == 0 && ty %400 ==0)? 29: 28;
-                                if (ty % 400 == 0)
-                                    x = 29;
-                                else if (ty % 100 == 0)
-                                    x = 28;
-                                else if (ty % 4 == 0)
-                                    x = 29;
-                                else
-                                    x = 28;
-                                break;
-                            default:
-                                x = 30;
-                                break;
-                        }
-                    }
-                    DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
-                    var cal = dfi.Calendar;
-                    var week = cal.GetWeekOfYear(DateTime.Parse("28-Mar-16"), dfi.CalendarWeekRule,
-                        dfi.FirstDayOfWeek);
-
-                    DateTime fromDate = new DateTime(fy, fm, 1);
-                    DateTime toDate = new DateTime(ty, tm, x);
-
-                    int bilDates = BillingDays(fromDate, toDate);
+                    //int bilDates = BillingDays(fromDate, toDate);
 
                     for (DateTime index = fromDate; index < toDate; index = index.AddMonths(1))
                     {
                         foreach (var res in resources)
                         {
                             var mn = new DateTimeFormatInfo();
-                            int days = 0;
                             int count = 0;
-                            
+                            int days = 0;
+
                             DateRange range = new DateRange(res.StartDate, res.EndDate);
 
                             for (DateTime index2 = index; index2 < index.AddMonths(1); index2 = index2.AddDays(1))
                             {
-                                DateTime[] bps = GetBillingPeriod(index2);
-                                 
+                                DateTime[] bps = GetBillingPeriodGeneral(index2);
+
                                 if (range.Includes(index))
                                 {
                                     if (res.StartDate >= bps[0])
@@ -148,16 +105,17 @@ namespace ExcelProc
 
                                     if (index2 == bps[1] && count == 0)
                                     {
-                                        ws.Cells[i, 1].Value = mn.GetAbbreviatedMonthName(index.Month) + "-" + index.ToString("yy");
+                                        ws.Cells[i, 1].Value = mn.GetAbbreviatedMonthName(index.Month) + "-" +
+                                                               index.ToString("yy");
                                         ws.Cells[i, 2].Value = res.ProjectId;
                                         ws.Cells[i, 3].Value = res.ProjectName;
                                         ws.Cells[i, 4].Value = res.ResourceName;
-                                        ws.Cells[i, 5].Value = "From " + bps[0].ToString("MMM") + " " + bps[0].Day + " till " + bps[1].ToString("MMM") + " " + bps[1].Day;
+                                        ws.Cells[i, 5].Value = "From " + bps[0].ToString("MMM") + " " + bps[0].Day +
+                                                               " till " + bps[1].ToString("MMM") + " " + bps[1].Day;
                                         ws.Cells[i, 6].Value = res.Rate;
                                         ws.Cells[i, 7].Value = res.Leaves;
                                         ws.Cells[i, 8].Value = days;
-                                        ///ws.Cells[i, 8].Value = GetBillingDaysInMonth(index.Month) * 5;
-                                        ws.Cells[i, 9].Value = days * res.Rate;
+                                        ws.Cells[i, 9].Value = days*res.Rate;
                                         i++;
                                         count++;
                                     }
@@ -179,6 +137,46 @@ namespace ExcelProc
             }
         }
 
+        public static DataTable ExcelSheetToDataTable(string path, string sName)
+        {
+            try
+            {
+                using (var pck = new OfficeOpenXml.ExcelPackage())
+                {
+                    using (var stream = File.OpenRead(path))
+                    {
+                        pck.Load(stream);
+                    }
+                    var ws = pck.Workbook.Worksheets.First();
+
+                    if (sName != string.Empty)
+                        ws = pck.Workbook.Worksheets[sName];
+
+                    DataTable tbl = new DataTable();
+                    foreach (var firstRowCell in ws.Cells[1, 1, 1, ws.Dimension.End.Column])
+                    {
+                        tbl.Columns.Add(firstRowCell.Text);
+                    }
+                    for (int rowNum = 2; rowNum <= ws.Dimension.End.Row; rowNum++)
+                    {
+                        var wsRow = ws.Cells[rowNum, 1, rowNum, ws.Dimension.End.Column];
+                        DataRow row = tbl.Rows.Add();
+                        foreach (var cell in wsRow)
+                        {
+                            row[cell.Start.Column - 1] = cell.Text;
+                        }
+                    }
+                    return tbl;
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error while reading file!");
+                return null;
+            }
+        }
+
+        #region Billing Period logic
         // Get billing period
         public static DateTime[] GetBillingPeriod(DateTime index)
         {
@@ -210,35 +208,110 @@ namespace ExcelProc
             billingES.Add(DateTime.Parse("23-Dec-16"));
 
             //return bp[index.Month-1];
-            DateTime[] temp = { billingPS[index.Month - 1], billingES[index.Month - 1] };
+            DateTime[] temp = {billingPS[index.Month - 1], billingES[index.Month - 1]};
 
             return temp;
         }
+
+        public static DateTime[] GetBillingPeriodGeneral(DateTime index)
+        {
+            List<DateTime> billingPS = new List<DateTime>();
+            List<DateTime> billingES = new List<DateTime>();
+
+            DateTime tempData = new DateTime();
+
+            DateTime financialYearStartDate = new DateTime(index.Year, 4, 1);
+            DateTime financialYearEndDate = new DateTime(index.Year+1, 3, 31);
+
+            switch (financialYearStartDate.DayOfWeek)
+            {
+                case DayOfWeek.Monday:
+                    tempData = financialYearStartDate;
+                    break;
+                case DayOfWeek.Tuesday:
+                    tempData = financialYearStartDate.AddDays(-1);
+                    break;
+                case DayOfWeek.Wednesday:
+                    tempData = financialYearStartDate.AddDays(-2);
+                    break;
+                case DayOfWeek.Thursday:
+                    tempData = financialYearStartDate.AddDays(-3);
+                    break;
+                case DayOfWeek.Friday:
+                    tempData = financialYearStartDate.AddDays(-4);
+                    break;
+                case DayOfWeek.Saturday:
+                    tempData = financialYearStartDate.AddDays(-5);
+                    break;
+                case DayOfWeek.Sunday:
+                    tempData = financialYearStartDate.AddDays(-6);
+                    break;
+            }
+
+            billingPS.Add(tempData);
+            bool change = false;
+            for (DateTime i = tempData; i <= financialYearEndDate;)
+            {
+                if (change)
+                {
+                    i = i.AddDays(1);
+                    billingPS.Add(i);
+                    change = false;
+                }
+                else
+                {
+                    if (i.Month == 2 || i.Month == 5 || i.Month == 8 || i.Month == 11)
+                        i = i.AddDays(35);
+                    else
+                        i = i.AddDays(28);
+                    billingES.Add(i);
+                    change = true;
+                }
+            }
+
+            DateTime[] temp = new DateTime[2];
+            if (index.Month >= 4)
+            {
+                temp[0] = billingPS[index.Month - 4];
+                temp[1] = billingES[index.Month - 4];
+            }
+            else
+            {
+                temp[0] = billingPS[index.Month + 8];
+                temp[1] = billingES[index.Month + 8];
+            }
+
+            return temp;
+        }
+        #endregion
+
+        #region Billing days count
 
         //getting total days
 
         public static int BillingDays(DateTime startDate, DateTime endDate)
         {
             int count = 0;
-            for (DateTime index = startDate; index < endDate; index = index.AddDays(1))
+            for (DateTime index = startDate; index <= endDate; index = index.AddDays(1))
             {
                 if (index.DayOfWeek != DayOfWeek.Sunday && index.DayOfWeek != DayOfWeek.Saturday)
                 {
-                    bool excluded = false;
-                    if (!excluded)
-                        count++;
+                    count++;
                 }
             }
             return count;
         }
-        public static int BillingDaysWithDateExclusion(DateTime startDate, DateTime endDate, Boolean excludeWeekends, List<DateTime> excludeDates)
+
+        public static int BillingDaysWithDateExclusion(DateTime startDate, DateTime endDate, Boolean excludeWeekends,
+            List<DateTime> excludeDates)
         {
             int count = 0;
             for (DateTime index = startDate; index < endDate; index = index.AddDays(1))
             {
                 if (excludeWeekends && index.DayOfWeek != DayOfWeek.Sunday && index.DayOfWeek != DayOfWeek.Saturday)
                 {
-                    bool excluded = false; ;
+                    bool excluded = false;
+                    ;
                     for (int i = 0; i < excludeDates.Count; i++)
                     {
                         if (index.Date.CompareTo(excludeDates[i].Date) == 0)
@@ -272,6 +345,8 @@ namespace ExcelProc
             days.Add(4);
             return days[m - 1];
         }
+
+        #endregion
     }
 
     public interface IRange<T>
