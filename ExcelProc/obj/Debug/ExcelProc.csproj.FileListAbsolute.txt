@@ -56,3 +56,6 @@ D:\Work\ToolForDevOps\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\ExcelP
 D:\Work\ToolForDevOps\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\ExcelProc.g.resources
 D:\Work\ToolForDevOps\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\ExcelProc.Properties.Resources.resources
 D:\Work\ToolForDevOps\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\ExcelProc.csproj.GenerateResource.Cache
+D:\Work\ToolForDevOps\DevOpsTrackerAndForecastToolCTS\ExcelProc\bin\Debug\MaterialDesignColors.dll
+D:\Work\ToolForDevOps\DevOpsTrackerAndForecastToolCTS\ExcelProc\bin\Debug\MaterialDesignThemes.Wpf.dll
+D:\Work\ToolForDevOps\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\App.baml

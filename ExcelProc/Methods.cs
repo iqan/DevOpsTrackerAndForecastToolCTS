@@ -219,7 +219,7 @@ namespace ExcelProc
             var cal = dfi.Calendar;
             var week = cal.GetWeekOfYear(DateTime.Parse("28-Mar-16"), dfi.CalendarWeekRule,
                 dfi.FirstDayOfWeek);
-
+            
             DateTime[] temp = {billingPS[index.Month - 1], billingES[index.Month - 1]};
 
             return temp;
