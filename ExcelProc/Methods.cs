@@ -71,10 +71,14 @@ namespace ExcelProc
 
                     int i = 2;
 
-                    DateTime fromDate = (DateTime) App.Current.Properties["FromDate"];
-                    DateTime toDate = (DateTime) App.Current.Properties["ToDate"];
+                    DateTime fromDate = System.DateTime.Today;
+                    DateTime toDate = new DateTime(fromDate.Year +1,3,31);
+                    if(App.Current.Properties["FromDate"] != null)
+                        fromDate = (DateTime) App.Current.Properties["FromDate"];
+                    if(App.Current.Properties["FromDate"] != null)
+                        toDate = (DateTime) App.Current.Properties["ToDate"];
 
-                    int bilDates = BillingDays(fromDate, toDate);
+                    //int bilDates = BillingDays(fromDate, toDate);
 
                     for (DateTime index = fromDate; index < toDate; index = index.AddMonths(1))
                     {
@@ -88,7 +92,7 @@ namespace ExcelProc
 
                             for (DateTime index2 = index; index2 < index.AddMonths(1); index2 = index2.AddDays(1))
                             {
-                                DateTime[] bps = GetBillingPeriod(index2);
+                                DateTime[] bps = GetBillingPeriodGeneral(index2);
 
                                 if (range.Includes(index))
                                 {
@@ -214,13 +218,68 @@ namespace ExcelProc
             List<DateTime> billingPS = new List<DateTime>();
             List<DateTime> billingES = new List<DateTime>();
 
-            DateTime tempDate = DateTime.Now.AddYears(2);
-            DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
-            var cal = dfi.Calendar;
-            var week = cal.GetWeekOfYear(DateTime.Parse("28-Mar-16"), dfi.CalendarWeekRule,
-                dfi.FirstDayOfWeek);
-            
-            DateTime[] temp = {billingPS[index.Month - 1], billingES[index.Month - 1]};
+            DateTime tempData = new DateTime();
+
+            DateTime financialYearStartDate = new DateTime(index.Year, 4, 1);
+            DateTime financialYearEndDate = new DateTime(index.Year+1, 3, 31);
+
+            switch (financialYearStartDate.DayOfWeek)
+            {
+                case DayOfWeek.Monday:
+                    tempData = financialYearStartDate;
+                    break;
+                case DayOfWeek.Tuesday:
+                    tempData = financialYearStartDate.AddDays(-1);
+                    break;
+                case DayOfWeek.Wednesday:
+                    tempData = financialYearStartDate.AddDays(-2);
+                    break;
+                case DayOfWeek.Thursday:
+                    tempData = financialYearStartDate.AddDays(-3);
+                    break;
+                case DayOfWeek.Friday:
+                    tempData = financialYearStartDate.AddDays(-4);
+                    break;
+                case DayOfWeek.Saturday:
+                    tempData = financialYearStartDate.AddDays(-5);
+                    break;
+                case DayOfWeek.Sunday:
+                    tempData = financialYearStartDate.AddDays(-6);
+                    break;
+            }
+
+            billingPS.Add(tempData);
+            bool change = false;
+            for (DateTime i = tempData; i <= financialYearEndDate;)
+            {
+                if (change)
+                {
+                    i = i.AddDays(1);
+                    billingPS.Add(i);
+                    change = false;
+                }
+                else
+                {
+                    if (i.Month == 2 || i.Month == 5 || i.Month == 8 || i.Month == 11)
+                        i = i.AddDays(35);
+                    else
+                        i = i.AddDays(28);
+                    billingES.Add(i);
+                    change = true;
+                }
+            }
+
+            DateTime[] temp = new DateTime[2];
+            if (index.Month >= 4)
+            {
+                temp[0] = billingPS[index.Month - 4];
+                temp[1] = billingES[index.Month - 4];
+            }
+            else
+            {
+                temp[0] = billingPS[index.Month + 8];
+                temp[1] = billingES[index.Month + 8];
+            }
 
             return temp;
         }
