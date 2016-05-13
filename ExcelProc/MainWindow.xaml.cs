@@ -252,6 +252,16 @@ namespace ExcelProc
         }
 
         #endregion
+
+        private void FromDate_DateValidationError(object sender, DatePickerDateValidationErrorEventArgs e)
+        {
+            MessageBox.Show("Entered date is not in proper format.", "Invalid Date");
+        }
+
+        private void ToDate_DateValidationError(object sender, DatePickerDateValidationErrorEventArgs e)
+        {
+            MessageBox.Show("Entered date is not in proper format.", "Invalid Date");
+        }
         
         //App.Current.Properties["FromMon"]
         //var picker = sender as DatePicker;

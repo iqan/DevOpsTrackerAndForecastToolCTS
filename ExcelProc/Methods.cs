@@ -55,29 +55,24 @@ namespace ExcelProc
                         if (row["Resource Name"].ToString() != "")
                         {
                             Resource res = new Resource();
-                            res.ProjectId = long.Parse((string)row[0]);
-                            res.ProjectName = (string)row[1];
-                            res.ResourceName = (string)row[2];
+                            res.ProjectId = long.Parse((string) row[0]);
+                            res.ProjectName = (string) row[1];
+                            res.ResourceName = (string) row[2];
                             res.BillingPeriod = "na";
-                            res.Rate = int.Parse((string)row[8]);
+                            res.Rate = int.Parse((string) row[8]);
                             res.Leaves = 0;
                             res.BillingDays = 20;
-                            res.TotalBilling = res.Rate * res.BillingDays;
-                            res.EndDate = DateTime.Parse((string)row[7]);
-                            res.StartDate = DateTime.Parse((string)row[6]);
+                            res.TotalBilling = res.Rate*res.BillingDays;
+                            res.EndDate = DateTime.Parse((string) row[7]);
+                            res.StartDate = DateTime.Parse((string) row[6]);
                             resources.Add(res);
                         }
                     }
 
                     int i = 2;
 
-                    DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
-                    var cal = dfi.Calendar;
-                    var week = cal.GetWeekOfYear(DateTime.Parse("28-Mar-16"), dfi.CalendarWeekRule,
-                        dfi.FirstDayOfWeek);
-
-                    DateTime fromDate = (DateTime)App.Current.Properties["FromDate"];
-                    DateTime toDate = (DateTime)App.Current.Properties["ToDate"];
+                    DateTime fromDate = (DateTime) App.Current.Properties["FromDate"];
+                    DateTime toDate = (DateTime) App.Current.Properties["ToDate"];
 
                     int bilDates = BillingDays(fromDate, toDate);
 
@@ -94,7 +89,7 @@ namespace ExcelProc
                             for (DateTime index2 = index; index2 < index.AddMonths(1); index2 = index2.AddDays(1))
                             {
                                 DateTime[] bps = GetBillingPeriod(index2);
-                                 
+
                                 if (range.Includes(index))
                                 {
                                     if (res.StartDate >= bps[0])
@@ -106,16 +101,17 @@ namespace ExcelProc
 
                                     if (index2 == bps[1] && count == 0)
                                     {
-                                        ws.Cells[i, 1].Value = mn.GetAbbreviatedMonthName(index.Month) + "-" + index.ToString("yy");
+                                        ws.Cells[i, 1].Value = mn.GetAbbreviatedMonthName(index.Month) + "-" +
+                                                               index.ToString("yy");
                                         ws.Cells[i, 2].Value = res.ProjectId;
                                         ws.Cells[i, 3].Value = res.ProjectName;
                                         ws.Cells[i, 4].Value = res.ResourceName;
-                                        ws.Cells[i, 5].Value = "From " + bps[0].ToString("MMM") + " " + bps[0].Day + " till " + bps[1].ToString("MMM") + " " + bps[1].Day;
+                                        ws.Cells[i, 5].Value = "From " + bps[0].ToString("MMM") + " " + bps[0].Day +
+                                                               " till " + bps[1].ToString("MMM") + " " + bps[1].Day;
                                         ws.Cells[i, 6].Value = res.Rate;
                                         ws.Cells[i, 7].Value = res.Leaves;
                                         ws.Cells[i, 8].Value = days;
-                                        ///ws.Cells[i, 8].Value = GetBillingDaysInMonth(index.Month) * 5;
-                                        ws.Cells[i, 9].Value = days * res.Rate;
+                                        ws.Cells[i, 9].Value = days*res.Rate;
                                         i++;
                                         count++;
                                     }
@@ -176,6 +172,7 @@ namespace ExcelProc
             }
         }
 
+        #region Billing Period logic
         // Get billing period
         public static DateTime[] GetBillingPeriod(DateTime index)
         {
@@ -207,7 +204,7 @@ namespace ExcelProc
             billingES.Add(DateTime.Parse("23-Dec-16"));
 
             //return bp[index.Month-1];
-            DateTime[] temp = { billingPS[index.Month - 1], billingES[index.Month - 1] };
+            DateTime[] temp = {billingPS[index.Month - 1], billingES[index.Month - 1]};
 
             return temp;
         }
@@ -218,12 +215,18 @@ namespace ExcelProc
             List<DateTime> billingES = new List<DateTime>();
 
             DateTime tempDate = DateTime.Now.AddYears(2);
-            //Calendar cal = new ;
-            
-            DateTime[] temp = { billingPS[index.Month - 1], billingES[index.Month - 1] };
+            DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
+            var cal = dfi.Calendar;
+            var week = cal.GetWeekOfYear(DateTime.Parse("28-Mar-16"), dfi.CalendarWeekRule,
+                dfi.FirstDayOfWeek);
+
+            DateTime[] temp = {billingPS[index.Month - 1], billingES[index.Month - 1]};
 
             return temp;
         }
+        #endregion
+
+        #region Billing days count
 
         //getting total days
 
@@ -234,19 +237,22 @@ namespace ExcelProc
             {
                 if (index.DayOfWeek != DayOfWeek.Sunday && index.DayOfWeek != DayOfWeek.Saturday)
                 {
-                        count++;
+                    count++;
                 }
             }
             return count;
         }
-        public static int BillingDaysWithDateExclusion(DateTime startDate, DateTime endDate, Boolean excludeWeekends, List<DateTime> excludeDates)
+
+        public static int BillingDaysWithDateExclusion(DateTime startDate, DateTime endDate, Boolean excludeWeekends,
+            List<DateTime> excludeDates)
         {
             int count = 0;
             for (DateTime index = startDate; index < endDate; index = index.AddDays(1))
             {
                 if (excludeWeekends && index.DayOfWeek != DayOfWeek.Sunday && index.DayOfWeek != DayOfWeek.Saturday)
                 {
-                    bool excluded = false; ;
+                    bool excluded = false;
+                    ;
                     for (int i = 0; i < excludeDates.Count; i++)
                     {
                         if (index.Date.CompareTo(excludeDates[i].Date) == 0)
@@ -280,6 +286,8 @@ namespace ExcelProc
             days.Add(4);
             return days[m - 1];
         }
+
+        #endregion
     }
 
     public interface IRange<T>
