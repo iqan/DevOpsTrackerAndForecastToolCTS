@@ -177,65 +177,66 @@ namespace ExcelProc
         // User Tips Methods
         private void BtnImport_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            InfoLabel.Content = "Select a file to Import.";
+            //ToolTip = "Select a file to Import.";
         }
 
         private void BtnImport_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            InfoLabel.Content = "";
+            //ToolTip = null;
         }
 
         private void BtnExport_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            InfoLabel.Content = "Select a folder to Export Excel file into.";
+            //ToolTip = "Select a folder to Export Excel file into.";
         }
 
         private void BtnExport_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            InfoLabel.Content = "";
+            //ToolTip = null;
         }
 
         private void ImportSheetName_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            InfoLabel.Content = "Select a Sheet.";
+            ToolTip = "Select a Sheet.";
         }
 
         private void ImportSheetName_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            InfoLabel.Content = "";
+            //ToolTip = null;
         }
 
         private void BtnPreviewImport_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            InfoLabel.Content = "Click to see preview of selected worksheet.";
+            ToolTip = "Click to see preview of selected worksheet.";
         }
 
         private void BtnPreviewImport_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            InfoLabel.Content = "";
+            ToolTip = null;
         }
 
         private void BtnPreviewExport_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            InfoLabel.Content = "Click to see preview of exporting worksheet.";
+            ToolTip = "Click to see preview of exporting worksheet.";
         }
 
         private void BtnPreviewExport_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            InfoLabel.Content = "";
+            ToolTip = null;
         }
 
         private void BtnExport_Do_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            InfoLabel.Content = "Click to export worksheet to file in selected folder.";
+            ToolTip = "Click to export worksheet to file in selected folder.";
         }
 
         private void BtnExport_Do_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            InfoLabel.Content = "";
+            ToolTip = null;
         }
 
         #endregion
+
 
         #region Set some properties
 
@@ -262,7 +263,8 @@ namespace ExcelProc
         {
             MessageBox.Show("Entered date is not in proper format.", "Invalid Date");
         }
-        
+
+
         //App.Current.Properties["FromMon"]
         //var picker = sender as DatePicker;
 
