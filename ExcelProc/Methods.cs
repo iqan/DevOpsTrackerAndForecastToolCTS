@@ -224,8 +224,6 @@ namespace ExcelProc
             {
                 if (index.DayOfWeek != DayOfWeek.Sunday && index.DayOfWeek != DayOfWeek.Saturday)
                 {
-                    bool excluded = false;
-                    if (!excluded)
                         count++;
                 }
             }
