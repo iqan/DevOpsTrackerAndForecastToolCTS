@@ -221,7 +221,9 @@ namespace ExcelProc
             DateTime tempData = new DateTime();
 
             DateTime financialYearStartDate = new DateTime(index.Year, 4, 1);
-            DateTime financialYearEndDate = new DateTime(index.Year+1, 3, 31);
+            DateTime financialYearEndDate = new DateTime(index.Year + 1, 3, 31);
+
+            List<int> w = new List<int>() { 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4 };
 
             switch (financialYearStartDate.DayOfWeek)
             {
@@ -250,22 +252,30 @@ namespace ExcelProc
 
             billingPS.Add(tempData);
             bool change = false;
+            int count = 0;
+
             for (DateTime i = tempData; i <= financialYearEndDate;)
             {
                 if (change)
                 {
-                    i = i.AddDays(1);
+                    if (i.AddDays(1).DayOfWeek == DayOfWeek.Saturday)
+                        i = i.AddDays(3);
+                    else if (i.AddDays(1).DayOfWeek == DayOfWeek.Sunday)
+                        i = i.AddDays(2);
+                    else
+                        i = i.AddDays(1);
                     billingPS.Add(i);
                     change = false;
                 }
                 else
                 {
-                    if (i.Month == 2 || i.Month == 5 || i.Month == 8 || i.Month == 11)
-                        i = i.AddDays(35);
+                    if (w[count] == 4)
+                        i = i.AddDays((w[count] * 5) + 5);
                     else
-                        i = i.AddDays(28);
+                        i = i.AddDays((w[count] * 5) + 7);
                     billingES.Add(i);
                     change = true;
+                    count++;
                 }
             }
 
