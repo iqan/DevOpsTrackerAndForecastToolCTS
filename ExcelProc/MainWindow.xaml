@@ -5,7 +5,7 @@
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
-    <Grid Name="MainGrid" Margin="0,0,2,-1" Background="#FF6BB09A">
+    <Grid Name="MainGrid" Margin="0,0,-8,-1" Background="#FF6BB09A">
         <DataGrid Name="PreviewFile" Margin="10,274,10,30" Visibility="Hidden" ItemsSource="{Binding}"/>
         <Image Name="Logo" HorizontalAlignment="Left" Height="54" Margin="10,10,0,0" VerticalAlignment="Top" Width="171" Source="Cognizant_LOGO.png"/>
         <TextBox Name="ImportPath" HorizontalAlignment="Left" Height="33" Margin="106,94,0,0" VerticalAlignment="Top" Width="419" Focusable="False" MaxLines="1"/>
