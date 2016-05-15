@@ -75,12 +75,12 @@ namespace ExcelProc
                     DateTime toDate = new DateTime(fromDate.Year +1,3,31);
                     if(App.Current.Properties["FromDate"] != null)
                         fromDate = (DateTime) App.Current.Properties["FromDate"];
-                    if(App.Current.Properties["FromDate"] != null)
+                    if(App.Current.Properties["ToDate"] != null)
                         toDate = (DateTime) App.Current.Properties["ToDate"];
 
                     //int bilDates = BillingDays(fromDate, toDate);
 
-                    for (DateTime index = fromDate; index < toDate; index = index.AddMonths(1))
+                    for (DateTime index = new DateTime(fromDate.Year,fromDate.Month,1); index < toDate; index = index.AddMonths(1))
                     {
                         foreach (var res in resources)
                         {

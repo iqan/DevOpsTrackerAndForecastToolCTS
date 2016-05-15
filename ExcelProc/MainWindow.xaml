@@ -1,27 +1,27 @@
 ﻿<Window x:Class="ExcelProc.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="DevOps Tracker and Forecast Tool - 2016/17" Height="648.5" Width="800" Icon="cognizant-icon.png"
+        Title="DevOps Tracker and Forecast Tool" Height="648.5" Width="800" Icon="cognizant-icon.png"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
-    <Grid Name="MainGrid" Margin="0,0,2,-1" Background="GhostWhite">
+    <Grid Name="MainGrid" Margin="0,0,2,-1" Background="#FF6BB09A">
         <DataGrid Name="PreviewFile" Margin="10,274,10,30" Visibility="Hidden" ItemsSource="{Binding}"/>
         <Image Name="Logo" HorizontalAlignment="Left" Height="54" Margin="10,10,0,0" VerticalAlignment="Top" Width="171" Source="Cognizant_LOGO.png"/>
         <TextBox Name="ImportPath" HorizontalAlignment="Left" Height="33" Margin="106,94,0,0" VerticalAlignment="Top" Width="419" Focusable="False" MaxLines="1"/>
         <ComboBox Name="ImportSheetName" Text="Select Sheet" HorizontalAlignment="Left" Height="32" Margin="531,95,0,0" VerticalAlignment="Top" Width="136" ItemsSource="{Binding}" SelectionChanged="ImportSheetName_SelectionChanged" SelectedIndex="0" IsEnabled="False" ToolTip = "Select a Sheet."/>
-        <Button Name="BtnPreviewImport" Content="Preview" HorizontalAlignment="Left" Height="30" Margin="673,94,0,0" VerticalAlignment="Top" Width="88" Click="BtnImportPreview_Click" IsEnabled="False" ToolTip = "Click to see preview of selected worksheet."/>
+        <Button Name="BtnPreviewImport" Content="Preview" HorizontalAlignment="Left" Height="30" Margin="673,94,0,0" VerticalAlignment="Top" Width="88" Click="BtnImportPreview_Click" ToolTip = "Click to see preview of selected worksheet." Background="#FFB7B73A" BorderBrush="#FF93932E" IsEnabled="False"/>
         <TextBox Name="ExportPath" HorizontalAlignment="Left" Height="30" Margin="107,190,0,0" VerticalAlignment="Top" Width="654" Focusable="False" MaxLines="1" SelectionChanged="ExportPath_SelectionChanged"/>
-        <Button Name="BtnPreviewExport" Content="Output Preview" HorizontalAlignment="Left" Height="30" Margin="636,225,0,0" VerticalAlignment="Top" Width="125" Click="BtnExportPreview_Click" IsEnabled="False" ToolTip = "Click to see preview of exporting worksheet."/>
+        <Button Name="BtnPreviewExport" Content="Output Preview" HorizontalAlignment="Left" Height="30" Margin="622,225,0,0" VerticalAlignment="Top" Width="139" Click="BtnExportPreview_Click" ToolTip = "Click to see preview of exporting worksheet." Background="#FFB7B73A" BorderBrush="#FF93932E" IsEnabled="False"/>
         <Label Name="Footer" Content="Created by - Iqan" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="25" Width="104" RenderTransformOrigin="-0.163,0.56"/>
         <Label x:Name="Footer_Copy" Content="© iqan.in" Height="25" Width="63" RenderTransformOrigin="-0.163,0.56" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-        <Button x:Name="BtnImport" Content="Browse" HorizontalAlignment="Left" Height="30" Margin="19,95,0,0" VerticalAlignment="Top" Width="82" Click="BtnImport_Click" ToolTip = "Select a file to Import."/>
-        <Button x:Name="BtnExport" Content="Browse" HorizontalAlignment="Left" Height="30" Margin="19,190,0,0" VerticalAlignment="Top" Width="83" Click="BtnExport_Click" ToolTip = "Select a folder to Export Excel file into."/>
-        <Button x:Name="BtnExport_Do" Content="Export" HorizontalAlignment="Left" Height="30" Margin="530,225,0,0" VerticalAlignment="Top" Width="96" Click="BtnExport_Do_Click" IsEnabled="False" ToolTip = "Click to export data into destination file."/>
-        <Label x:Name="Label_Import" Background="GhostWhite" Content="Import" HorizontalAlignment="Left" Margin="19,62,0,0" VerticalAlignment="Top" Width="62" Height="29" FontSize="14.667" FontWeight="Bold"/>
-        <Label x:Name="Label_Export" Background="GhostWhite" Content="Export" HorizontalAlignment="Left" Margin="19,157,0,0" VerticalAlignment="Top" Width="62" Height="29" FontSize="14.667" FontWeight="Bold" RenderTransformOrigin="0.81,-0.577"/>
-        <Border x:Name="ImportBorder" Background="GhostWhite" BorderBrush="Silver" BorderThickness="1" CornerRadius="3,3,3,3" HorizontalAlignment="Left" Height="61" Margin="10,80,0,0" VerticalAlignment="Top" Width="770" Opacity="0.5" IsHitTestVisible="False" IsEnabled="False" Panel.ZIndex="-1"/>
-        <Border x:Name="ExportBorder" Background="GhostWhite" BorderBrush="Silver" BorderThickness="1" CornerRadius="3,3,3,3" HorizontalAlignment="Left" Height="98" Margin="10,171,0,0" VerticalAlignment="Top" Width="770" Opacity="0.5" IsHitTestVisible="False" IsEnabled="False" Panel.ZIndex="-1"/>
+        <Button x:Name="BtnImport" Content="Browse" HorizontalAlignment="Left" Height="30" Margin="19,95,0,0" VerticalAlignment="Top" Width="82" Click="BtnImport_Click" ToolTip = "Select a file to Import." Background="#FFF58646" BorderBrush="#FFA2592F"/>
+        <Button x:Name="BtnExport" Content="Browse" HorizontalAlignment="Left" Height="30" Margin="19,190,0,0" VerticalAlignment="Top" Width="83" Click="BtnExport_Click" ToolTip = "Select a folder to Export Excel file into." Background="#FFF58646" BorderBrush="#FFA45A2F"/>
+        <Button x:Name="BtnExport_Do" Content="Export" HorizontalAlignment="Left" Height="30" Margin="521,225,0,0" VerticalAlignment="Top" Width="96" Click="BtnExport_Do_Click" IsEnabled="False" ToolTip = "Click to export data into destination file." Background="#FF3A56B7" BorderBrush="#FF522C95"/>
+        <Label x:Name="Label_Import" Background="#FF6BB09A" Content="Import" HorizontalAlignment="Left" Margin="19,62,0,0" VerticalAlignment="Top" Width="62" Height="29" FontSize="14.667" FontWeight="Bold"/>
+        <Label x:Name="Label_Export" Background="#FF6BB09A" Content="Export" HorizontalAlignment="Left" Margin="19,157,0,0" VerticalAlignment="Top" Width="62" Height="29" FontSize="14.667" FontWeight="Bold" RenderTransformOrigin="0.81,-0.577"/>
+        <Border x:Name="ImportBorder" Background="#FF6BB09A" BorderBrush="Silver" BorderThickness="1" CornerRadius="3,3,3,3" HorizontalAlignment="Left" Height="61" Margin="10,80,0,0" VerticalAlignment="Top" Width="770" Opacity="0.5" IsHitTestVisible="False" IsEnabled="False" Panel.ZIndex="-1"/>
+        <Border x:Name="ExportBorder" Background="#FF6BB09A" BorderBrush="Silver" BorderThickness="1" CornerRadius="3,3,3,3" HorizontalAlignment="Left" Height="98" Margin="10,171,0,0" VerticalAlignment="Top" Width="770" Opacity="0.5" IsHitTestVisible="False" IsEnabled="False" Panel.ZIndex="-1"/>
         <Label x:Name="From" Content="From" HorizontalAlignment="Left" Height="24" Margin="210,225,0,0" VerticalAlignment="Top" Width="42" Foreground="Black"/>
         <Border BorderBrush="GhostWhite" BorderThickness="1" HorizontalAlignment="Stretch" Height="25" VerticalAlignment="Bottom" Width="Auto" Background="#FF92B9E0" Panel.ZIndex="-1"/>
         <Label x:Name="To" Content="To" HorizontalAlignment="Left" Height="24" Margin="364,225,0,0" VerticalAlignment="Top" Width="28" Foreground="Black" RenderTransformOrigin="1.393,0.542"/>
