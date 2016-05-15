@@ -89,12 +89,16 @@ namespace ExcelProc
                             int days = 0;
 
                             DateRange range = new DateRange(res.StartDate, res.EndDate);
+                            DateTime[] bps = GetBillingPeriodGeneral(index);
 
                             for (DateTime index2 = index; index2 < index.AddMonths(1); index2 = index2.AddDays(1))
                             {
-                                DateTime[] bps = GetBillingPeriodGeneral(index2);
+                                if (index2.Month < 4)
+                                    bps = GetBillingPeriodGeneral(index2.AddYears(-1));
+                                if (index2 == GetFinancialYearStartDate(index2))
+                                    bps = GetBillingPeriodGeneral(index2);
 
-                                if (range.Includes(index))
+                                if (range.Includes(index2))
                                 {
                                     if (res.StartDate >= bps[0])
                                         days = BillingDays(res.StartDate, bps[1]);
@@ -294,6 +298,39 @@ namespace ExcelProc
             return temp;
         }
         #endregion
+        public static DateTime GetFinancialYearStartDate(DateTime index)
+        {
+            DateTime tempData = new DateTime();
+
+            DateTime financialYearStartDate = new DateTime(index.Year, 4, 1);
+            DateTime financialYearEndDate = new DateTime(index.Year + 1, 3, 31);
+
+            switch (financialYearStartDate.DayOfWeek)
+            {
+                case DayOfWeek.Monday:
+                    tempData = financialYearStartDate;
+                    break;
+                case DayOfWeek.Tuesday:
+                    tempData = financialYearStartDate.AddDays(-1);
+                    break;
+                case DayOfWeek.Wednesday:
+                    tempData = financialYearStartDate.AddDays(-2);
+                    break;
+                case DayOfWeek.Thursday:
+                    tempData = financialYearStartDate.AddDays(-3);
+                    break;
+                case DayOfWeek.Friday:
+                    tempData = financialYearStartDate.AddDays(-4);
+                    break;
+                case DayOfWeek.Saturday:
+                    tempData = financialYearStartDate.AddDays(-5);
+                    break;
+                case DayOfWeek.Sunday:
+                    tempData = financialYearStartDate.AddDays(-6);
+                    break;
+            }
+            return tempData;
+        }
 
         #region Billing days count
 
