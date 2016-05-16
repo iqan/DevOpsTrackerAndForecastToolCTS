@@ -6,8 +6,6 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ExcelProc
@@ -186,7 +184,6 @@ namespace ExcelProc
         }
 
         #region Billing Period logic
-        // Get billing period
 
         public static DateTime[] GetBillingPeriodGeneral(DateTime index)
         {
@@ -244,7 +241,7 @@ namespace ExcelProc
 
             return temp;
         }
-        #endregion
+
         public static DateTime GetFinancialYearStartDate(DateTime index)
         {
             DateTime tempData = new DateTime();
@@ -278,10 +275,9 @@ namespace ExcelProc
             }
             return tempData;
         }
+        #endregion
 
         #region Billing days count
-
-        //getting total days
 
         public static int BillingDays(DateTime startDate, DateTime endDate)
         {
@@ -320,24 +316,6 @@ namespace ExcelProc
                 }
             }
             return count;
-        }
-
-        public static int GetBillingDaysInMonth(int m)
-        {
-            List<int> days = new List<int>();
-            days.Add(5);
-            days.Add(4);
-            days.Add(4);
-            days.Add(5);
-            days.Add(4);
-            days.Add(4);
-            days.Add(5);
-            days.Add(4);
-            days.Add(4);
-            days.Add(5);
-            days.Add(4);
-            days.Add(4);
-            return days[m - 1];
         }
 
         #endregion
