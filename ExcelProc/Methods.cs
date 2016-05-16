@@ -3,6 +3,7 @@ using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -63,6 +64,12 @@ namespace ExcelProc
                             res.TotalBilling = res.Rate*res.BillingDays;
                             res.EndDate = DateTime.Parse((string) row[7]);
                             res.StartDate = DateTime.Parse((string) row[6]);
+                            if ((string)row[13] != "")
+                                res.LikelyEntensionTill = DateTime.Parse((string)row[13]);    
+                            
+                            res.Extension = false;
+
+                            res.Extension = (res.LikelyEntensionTill >= DateTime.Today)? true: false;
                             resources.Add(res);
                         }
                     }
@@ -77,6 +84,7 @@ namespace ExcelProc
                         toDate = (DateTime) App.Current.Properties["ToDate"];
 
                     //int bilDates = BillingDays(fromDate, toDate);
+                    int oneTime = 0;
 
                     for (DateTime index = new DateTime(fromDate.Year,fromDate.Month,1); index < toDate; index = index.AddMonths(1))
                     {
@@ -87,16 +95,25 @@ namespace ExcelProc
                             int days = 0;
 
                             DateRange range = new DateRange(res.StartDate, res.EndDate);
+
                             DateTime[] bps = GetBillingPeriodGeneral(index);
                             DateTime tempEndDate = bps[1];
+                            
                             for (DateTime index2 = index; index2 < index.AddMonths(1); index2 = index2.AddDays(1))
                             {
                                 if (index2.Month < 4)
                                     bps = GetBillingPeriodGeneral(index2.AddYears(-1));
                                 else if (index2 == GetFinancialYearStartDate(index2))
                                     bps = GetBillingPeriodGeneral(index2);
-                                //else
-                                //    bps = GetBillingPeriodGeneral(index);
+
+                                bool color = false;
+                                if (index2 == res.EndDate.AddDays(1) && res.Extension)
+                                {
+                                    res.StartDate = res.EndDate;
+                                    res.EndDate = res.LikelyEntensionTill;
+                                    range = new DateRange(res.StartDate, res.EndDate);
+                                    color = true;
+                                }
 
                                 if (range.Includes(index2))
                                 {
@@ -112,6 +129,14 @@ namespace ExcelProc
 
                                     if (index2 == tempEndDate && count == 0)
                                     {
+                                        if (color)
+                                        {
+                                            using (var r = ws.Cells[i, 1, i, 9])
+                                            {
+                                                r.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                                                r.Style.Fill.BackgroundColor.SetColor(Color.LightPink);
+                                            }
+                                        }
                                         ws.Cells[i, 1].Value = mn.GetAbbreviatedMonthName(index.Month) + "-" +
                                                                index.ToString("yy");
                                         ws.Cells[i, 2].Value = res.ProjectId;

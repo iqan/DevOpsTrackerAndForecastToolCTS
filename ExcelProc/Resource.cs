@@ -18,5 +18,7 @@ namespace ExcelProc
         public int TotalBilling { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public DateTime LikelyEntensionTill { get; set; }
+        public bool Extension { get; set; }
     }
 }
