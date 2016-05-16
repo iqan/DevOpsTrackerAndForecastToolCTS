@@ -63,3 +63,6 @@ D:\dev\Local Git Repo\DevOpsTrackerAndForecastToolCTS\ExcelProc\bin\Debug\Materi
 D:\dev\Local Git Repo\DevOpsTrackerAndForecastToolCTS\ExcelProc\bin\Debug\MaterialDesignThemes.Wpf.dll
 D:\dev\Local Git Repo\DevOpsTrackerAndForecastToolCTS\ExcelProc\bin\Debug\EPPlus.xml
 D:\dev\Local Git Repo\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\App.baml
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS\ExcelProc\bin\Debug\MaterialDesignColors.dll
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS\ExcelProc\bin\Debug\MaterialDesignThemes.Wpf.dll
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\App.baml

@@ -90,24 +90,29 @@ namespace ExcelProc
 
                             DateRange range = new DateRange(res.StartDate, res.EndDate);
                             DateTime[] bps = GetBillingPeriodGeneral(index);
-
+                            DateTime tempEndDate = bps[1];
                             for (DateTime index2 = index; index2 < index.AddMonths(1); index2 = index2.AddDays(1))
                             {
                                 if (index2.Month < 4)
                                     bps = GetBillingPeriodGeneral(index2.AddYears(-1));
-                                if (index2 == GetFinancialYearStartDate(index2))
+                                else if (index2 == GetFinancialYearStartDate(index2))
                                     bps = GetBillingPeriodGeneral(index2);
+                                //else
+                                //    bps = GetBillingPeriodGeneral(index);
 
                                 if (range.Includes(index2))
                                 {
                                     if (res.StartDate >= bps[0])
                                         days = BillingDays(res.StartDate, bps[1]);
                                     else if (res.EndDate <= bps[1])
+                                    {
                                         days = BillingDays(bps[0], res.EndDate);
+                                        tempEndDate = res.EndDate;
+                                    }
                                     else
                                         days = BillingDays(bps[0], bps[1]);
 
-                                    if (index2 == bps[1] && count == 0)
+                                    if (index2 == tempEndDate && count == 0)
                                     {
                                         ws.Cells[i, 1].Value = mn.GetAbbreviatedMonthName(index.Month) + "-" +
                                                                index.ToString("yy");
