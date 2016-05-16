@@ -34,7 +34,6 @@ namespace ExcelProc
             App.Current.Properties["isName"] = string.Empty;
             App.Current.Properties["esName"] = string.Empty;
             InitializeComponent();
-            //SetComboboxItems();
         }
 
         #region Import Methods
@@ -72,7 +71,6 @@ namespace ExcelProc
             tbl = Methods.ExcelSheetToDataTable(ImportPath.Text, str);
             if (tbl != null)
             {
-                BtnPreviewImport.IsEnabled = true;
                 PreviewFile.DataContext = tbl.DefaultView;
             }
         }

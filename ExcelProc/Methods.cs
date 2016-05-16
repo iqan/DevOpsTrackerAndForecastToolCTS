@@ -187,40 +187,6 @@ namespace ExcelProc
 
         #region Billing Period logic
         // Get billing period
-        public static DateTime[] GetBillingPeriod(DateTime index)
-        {
-            List<DateTime> billingPS = new List<DateTime>();
-            List<DateTime> billingES = new List<DateTime>();
-            billingPS.Add(DateTime.Parse("26-Dec-16"));
-            billingES.Add(DateTime.Parse("20-Jan-17"));
-            billingPS.Add(DateTime.Parse("23-Jan-17"));
-            billingES.Add(DateTime.Parse("24-Feb-17"));
-            billingPS.Add(DateTime.Parse("27-Feb-17"));
-            billingES.Add(DateTime.Parse("24-Mar-17"));
-            billingPS.Add(DateTime.Parse("28-Mar-16"));
-            billingES.Add(DateTime.Parse("22-Apr-16"));
-            billingPS.Add(DateTime.Parse("25-Apr-16"));
-            billingES.Add(DateTime.Parse("27-May-16"));
-            billingPS.Add(DateTime.Parse("30-May-16"));
-            billingES.Add(DateTime.Parse("24-Jun-16"));
-            billingPS.Add(DateTime.Parse("27-Jun-16"));
-            billingES.Add(DateTime.Parse("22-Jul-16"));
-            billingPS.Add(DateTime.Parse("25-Jul-16"));
-            billingES.Add(DateTime.Parse("26-Aug-16"));
-            billingPS.Add(DateTime.Parse("29-Aug-16"));
-            billingES.Add(DateTime.Parse("23-Sep-16"));
-            billingPS.Add(DateTime.Parse("26-Sep-16"));
-            billingES.Add(DateTime.Parse("21-Oct-16"));
-            billingPS.Add(DateTime.Parse("24-Oct-16"));
-            billingES.Add(DateTime.Parse("25-Nov-16"));
-            billingPS.Add(DateTime.Parse("28-Nov-16"));
-            billingES.Add(DateTime.Parse("23-Dec-16"));
-
-            //return bp[index.Month-1];
-            DateTime[] temp = {billingPS[index.Month - 1], billingES[index.Month - 1]};
-
-            return temp;
-        }
 
         public static DateTime[] GetBillingPeriodGeneral(DateTime index)
         {
@@ -234,31 +200,7 @@ namespace ExcelProc
 
             List<int> w = new List<int>() { 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 4 };
 
-            switch (financialYearStartDate.DayOfWeek)
-            {
-                case DayOfWeek.Monday:
-                    tempData = financialYearStartDate;
-                    break;
-                case DayOfWeek.Tuesday:
-                    tempData = financialYearStartDate.AddDays(-1);
-                    break;
-                case DayOfWeek.Wednesday:
-                    tempData = financialYearStartDate.AddDays(-2);
-                    break;
-                case DayOfWeek.Thursday:
-                    tempData = financialYearStartDate.AddDays(-3);
-                    break;
-                case DayOfWeek.Friday:
-                    tempData = financialYearStartDate.AddDays(-4);
-                    break;
-                case DayOfWeek.Saturday:
-                    tempData = financialYearStartDate.AddDays(-5);
-                    break;
-                case DayOfWeek.Sunday:
-                    tempData = financialYearStartDate.AddDays(-6);
-                    break;
-            }
-
+            tempData = GetFinancialYearStartDate(financialYearStartDate);
             billingPS.Add(tempData);
             bool change = false;
             int count = 0;

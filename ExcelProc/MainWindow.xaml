@@ -6,7 +6,7 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
     <Grid Name="MainGrid" Margin="0,0,-8,-1" Background="#FF6BB09A">
-        <DataGrid Name="PreviewFile" Margin="10,274,10,30" Visibility="Hidden" ItemsSource="{Binding}"/>
+        <DataGrid Name="PreviewFile" Margin="10,274,10,30" Visibility="Hidden" ItemsSource="{Binding}" Background="#FF959090" RowBackground="#FFC3C3C3"/>
         <Image Name="Logo" HorizontalAlignment="Left" Height="54" Margin="10,10,0,0" VerticalAlignment="Top" Width="171" Source="Cognizant_LOGO.png"/>
         <TextBox Name="ImportPath" HorizontalAlignment="Left" Height="33" Margin="106,94,0,0" VerticalAlignment="Top" Width="419" Focusable="False" MaxLines="1"/>
         <ComboBox Name="ImportSheetName" Text="Select Sheet" HorizontalAlignment="Left" Height="32" Margin="531,95,0,0" VerticalAlignment="Top" Width="136" ItemsSource="{Binding}" SelectionChanged="ImportSheetName_SelectionChanged" SelectedIndex="0" IsEnabled="False" ToolTip = "Select a Sheet."/>
@@ -22,9 +22,9 @@
         <Label x:Name="Label_Export" Background="#FF6BB09A" Content="Export" HorizontalAlignment="Left" Margin="19,157,0,0" VerticalAlignment="Top" Width="62" Height="29" FontSize="14.667" FontWeight="Bold" RenderTransformOrigin="0.81,-0.577"/>
         <Border x:Name="ImportBorder" Background="#FF6BB09A" BorderBrush="Silver" BorderThickness="1" CornerRadius="3,3,3,3" HorizontalAlignment="Left" Height="61" Margin="10,80,0,0" VerticalAlignment="Top" Width="770" Opacity="0.5" IsHitTestVisible="False" IsEnabled="False" Panel.ZIndex="-1"/>
         <Border x:Name="ExportBorder" Background="#FF6BB09A" BorderBrush="Silver" BorderThickness="1" CornerRadius="3,3,3,3" HorizontalAlignment="Left" Height="98" Margin="10,171,0,0" VerticalAlignment="Top" Width="770" Opacity="0.5" IsHitTestVisible="False" IsEnabled="False" Panel.ZIndex="-1"/>
-        <Label x:Name="From" Content="From" HorizontalAlignment="Left" Height="24" Margin="210,225,0,0" VerticalAlignment="Top" Width="42" Foreground="Black"/>
+        <Label x:Name="From" Content="FROM" HorizontalAlignment="Left" Height="24" Margin="210,225,0,0" VerticalAlignment="Top" Width="42" Foreground="GhostWhite"/>
         <Border BorderBrush="GhostWhite" BorderThickness="1" HorizontalAlignment="Stretch" Height="25" VerticalAlignment="Bottom" Width="Auto" Background="#FF92B9E0" Panel.ZIndex="-1"/>
-        <Label x:Name="To" Content="To" HorizontalAlignment="Left" Height="24" Margin="364,225,0,0" VerticalAlignment="Top" Width="28" Foreground="Black" RenderTransformOrigin="1.393,0.542"/>
+        <Label x:Name="To" Content="TO" HorizontalAlignment="Left" Height="24" Margin="364,225,0,0" VerticalAlignment="Top" Width="28" Foreground="GhostWhite" RenderTransformOrigin="1.393,0.542"/>
         <DatePicker Name="ToDate" HorizontalAlignment="Left" Margin="397,225,0,0" VerticalAlignment="Top" SelectedDateChanged="ToDate_SelectedDateChanged" IsEnabled="False" DateValidationError="ToDate_DateValidationError" ToolTip="Select date till which you want to forecast."/>
         <DatePicker Name="FromDate" HorizontalAlignment="Left" Margin="257,225,0,0" VerticalAlignment="Top" SelectedDateChanged="FromDate_SelectedDateChanged" IsEnabled="False" DateValidationError="FromDate_DateValidationError" ToolTip="Select date from which you want to forecast."/>
     </Grid>
