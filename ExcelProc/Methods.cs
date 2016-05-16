@@ -8,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup;
 
 namespace ExcelProc
 {
@@ -68,6 +69,7 @@ namespace ExcelProc
                                 res.LikelyEntensionTill = DateTime.Parse((string)row[13]);    
                             
                             res.Extension = false;
+                            res.OverMonth = 0;
 
                             res.Extension = (res.LikelyEntensionTill >= DateTime.Today)? true: false;
                             resources.Add(res);
@@ -84,7 +86,6 @@ namespace ExcelProc
                         toDate = (DateTime) App.Current.Properties["ToDate"];
 
                     //int bilDates = BillingDays(fromDate, toDate);
-                    int oneTime = 0;
 
                     for (DateTime index = new DateTime(fromDate.Year,fromDate.Month,1); index < toDate; index = index.AddMonths(1))
                     {
@@ -106,13 +107,22 @@ namespace ExcelProc
                                 else if (index2 == GetFinancialYearStartDate(index2))
                                     bps = GetBillingPeriodGeneral(index2);
 
-                                bool color = false;
                                 if (index2 == res.EndDate.AddDays(1) && res.Extension)
                                 {
                                     res.StartDate = res.EndDate;
                                     res.EndDate = res.LikelyEntensionTill;
                                     range = new DateRange(res.StartDate, res.EndDate);
-                                    color = true;
+                                    tempEndDate = GetBillingPeriodGeneral(index2)[1];
+                                    res.OverMonth = 1;
+                                    count = 0;
+                                }
+                                if (res.OverMonth == 1)
+                                {
+                                    using (var r = ws.Cells[i, 1, i, 9])
+                                    {
+                                        r.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                                        r.Style.Fill.BackgroundColor.SetColor(Color.LightPink);
+                                    }
                                 }
 
                                 if (range.Includes(index2))
@@ -129,14 +139,6 @@ namespace ExcelProc
 
                                     if (index2 == tempEndDate && count == 0)
                                     {
-                                        if (color)
-                                        {
-                                            using (var r = ws.Cells[i, 1, i, 9])
-                                            {
-                                                r.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                                                r.Style.Fill.BackgroundColor.SetColor(Color.LightPink);
-                                            }
-                                        }
                                         ws.Cells[i, 1].Value = mn.GetAbbreviatedMonthName(index.Month) + "-" +
                                                                index.ToString("yy");
                                         ws.Cells[i, 2].Value = res.ProjectId;

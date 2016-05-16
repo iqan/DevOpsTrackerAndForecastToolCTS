@@ -20,5 +20,6 @@ namespace ExcelProc
         public DateTime EndDate { get; set; }
         public DateTime LikelyEntensionTill { get; set; }
         public bool Extension { get; set; }
+        public int OverMonth { get; set; }
     }
 }
