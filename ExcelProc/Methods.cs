@@ -124,6 +124,14 @@ namespace ExcelProc
                                         r.Style.Fill.BackgroundColor.SetColor(Color.LightPink);
                                     }
                                 }
+                                else
+                                {
+                                    using (var r = ws.Cells[i, 1, i, 9])
+                                    {
+                                        r.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                                        r.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+                                    }
+                                }
 
                                 if (range.Includes(index2))
                                 {
