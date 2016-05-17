@@ -66,3 +66,23 @@ D:\dev\Local Git Repo\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\App.ba
 D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS\ExcelProc\bin\Debug\MaterialDesignColors.dll
 D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS\ExcelProc\bin\Debug\MaterialDesignThemes.Wpf.dll
 D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS\ExcelProc\obj\Debug\App.baml
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\bin\Debug\ExcelProc.exe.config
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\obj\Debug\ExcelProc.exe
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\obj\Debug\ExcelProc.pdb
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\bin\Debug\ExcelProc.exe
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\bin\Debug\ExcelProc.pdb
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\bin\Debug\EPPlus.dll
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\bin\Debug\MaterialDesignColors.dll
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\bin\Debug\MaterialDesignThemes.Wpf.dll
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\bin\Debug\EPPlus.xml
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\obj\Debug\ExcelProc.csprojResolveAssemblyReference.cache
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\obj\Debug\MainWindow.baml
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\obj\Debug\App.baml
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\obj\Debug\MainWindow.g.cs
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\obj\Debug\App.g.cs
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\obj\Debug\ExcelProc_MarkupCompile.cache
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\obj\Debug\ExcelProc.g.resources
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\obj\Debug\ExcelProc.Properties.Resources.resources
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\obj\Debug\ExcelProc.csproj.GenerateResource.Cache
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\bin\Debug\ForecastToolMethods.dll
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\bin\Debug\ForecastToolMethods.pdb

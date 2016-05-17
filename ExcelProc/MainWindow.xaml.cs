@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Data;
 using System.IO;
 using System.Windows.Forms;
+using ForecastToolMethods;
 using MessageBox = System.Windows.MessageBox;
 
 namespace ExcelProc
@@ -131,8 +132,15 @@ namespace ExcelProc
             if (App.Current.Properties["isName"].ToString() != string.Empty)
                 impSheet = App.Current.Properties["isName"].ToString();
             DataTable dt = Methods.ExcelSheetToDataTable(ImportPath.Text, impSheet);
-            
-            int res = Methods.ExportToExcel(dt, destUrl);
+
+            DateTime fromDate = System.DateTime.Today;
+            DateTime toDate = new DateTime(fromDate.Year + 1, 3, 31);
+            if (App.Current.Properties["FromDate"] != null)
+                fromDate = (DateTime)App.Current.Properties["FromDate"];
+            if (App.Current.Properties["ToDate"] != null)
+                toDate = (DateTime)App.Current.Properties["ToDate"];
+
+            int res = Methods.ExportToExcel(dt, destUrl, fromDate, toDate);
 
             if (res == -1)
                 BtnPreviewExport.IsEnabled = false;
