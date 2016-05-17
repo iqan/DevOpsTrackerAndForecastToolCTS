@@ -42,7 +42,7 @@ namespace ExcelProc
                     {
                         range.Style.Font.Bold = true;
                         range.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightCoral);
+                        range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightSeaGreen);
                         range.Style.Font.Color.SetColor(System.Drawing.Color.Black);
                         range.Style.ShrinkToFit = false;
                     }
@@ -109,7 +109,7 @@ namespace ExcelProc
 
                                 if (index2 == res.EndDate.AddDays(1) && res.Extension)
                                 {
-                                    res.StartDate = res.EndDate;
+                                    res.StartDate = res.EndDate.AddDays(1);
                                     res.EndDate = res.LikelyEntensionTill;
                                     range = new DateRange(res.StartDate, res.EndDate);
                                     tempEndDate = GetBillingPeriodGeneral(index2)[1];
@@ -129,7 +129,7 @@ namespace ExcelProc
                                     using (var r = ws.Cells[i, 1, i, 9])
                                     {
                                         r.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                                        r.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+                                        r.Style.Fill.BackgroundColor.SetColor(Color.White);
                                     }
                                 }
 
