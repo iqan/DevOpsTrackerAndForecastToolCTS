@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelProc", "ExcelProc\ExcelProc.csproj", "{696E4B31-864C-454A-AA57-0D116B2FBB01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelProc.Tests", "ExcelProc.Tests\ExcelProc.Tests.csproj", "{021E6FA0-60D9-4B3D-A7D6-D970A047A721}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{696E4B31-864C-454A-AA57-0D116B2FBB01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{696E4B31-864C-454A-AA57-0D116B2FBB01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{696E4B31-864C-454A-AA57-0D116B2FBB01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{021E6FA0-60D9-4B3D-A7D6-D970A047A721}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{021E6FA0-60D9-4B3D-A7D6-D970A047A721}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{021E6FA0-60D9-4B3D-A7D6-D970A047A721}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{021E6FA0-60D9-4B3D-A7D6-D970A047A721}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
