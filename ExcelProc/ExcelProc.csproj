@@ -37,7 +37,8 @@
     <Reference Include="EPPlus">
       <HintPath>C:\Users\Iqan.Shaikh\Downloads\EPPlus.dll</HintPath>
     </Reference>
-    <Reference Include="ForecastToolMethods">
+    <Reference Include="ForecastToolMethods, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Work\ToolForDevOps\ForecastToolMethods\ForecastToolMethods\bin\Debug\ForecastToolMethods.dll</HintPath>
     </Reference>
     <Reference Include="MaterialDesignColors, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -115,7 +116,7 @@
     <Resource Include="Cognizant_LOGO.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="cognizant-icon.png" />
+    <Resource Include="cogniicon2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
