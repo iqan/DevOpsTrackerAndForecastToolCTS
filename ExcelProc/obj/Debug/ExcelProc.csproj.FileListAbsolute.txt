@@ -86,3 +86,5 @@ D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\obj\Debug\ExcelProc
 D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\obj\Debug\ExcelProc.csproj.GenerateResource.Cache
 D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\bin\Debug\ForecastToolMethods.dll
 D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\bin\Debug\ForecastToolMethods.pdb
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\bin\Debug\nunit.framework.dll
+D:\Iqan\Git\DevOpsTrackerAndForecastToolCTS - Copy\ExcelProc\bin\Debug\nunit.framework.xml
