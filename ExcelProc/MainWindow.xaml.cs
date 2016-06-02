@@ -51,7 +51,7 @@ namespace ExcelProc
             PreviewFile.Visibility = Visibility.Visible;
             var tbl = new DataTable();
             string str = string.Empty;
-            if (App.Current.Properties["isName"].ToString() != string.Empty)
+            if (App.Current.Properties["isName"].ToString() != string.Empty && !App.Current.Properties["isName"].ToString().Contains("Select"))
                 str = App.Current.Properties["isName"].ToString();
             tbl = Methods.ExcelSheetToDataTable(ImportPath.Text, str);
             if (tbl != null)
